@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.navigation.safe.args)
-
-    id("kotlin-kapt")
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.kotlin.kapt)
 }
 
 android {
@@ -44,6 +44,10 @@ android {
 }
 
 dependencies {
+
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(platform(libs.firebase.bom))
 
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler)
