@@ -9,18 +9,19 @@ data class User(
     val phoneNumber: String,
     val email: String,
     val avatarUrl: String,
-    val likedApartments: MutableList<String> = mutableListOf(),
-    var lastUpdated: Long? = null
+    val likedApartments: MutableList<String> = mutableListOf()
 ) {
 
     companion object {
+        private const val ID_KEY = "id"
         private const val NAME_KEY = "name"
         private const val PHONE_NUMBER_KEY = "phoneNumber"
         private const val EMAIL_KEY = "email"
         private const val AVATAR_URL_KEY = "avatarUrl"
         const val LIKED_APARTMENTS_KEY = "likedApartments"
 
-        fun fromJson(json: Map<String, Any?>, id: String): User {
+        fun fromJson(json: Map<String, Any?>): User {
+            val id = json[ID_KEY] as? String ?: ""
             val name = json[NAME_KEY] as? String ?: ""
             val phoneNumber = json[PHONE_NUMBER_KEY] as? String ?: ""
             val email = json[EMAIL_KEY] as? String ?: ""
