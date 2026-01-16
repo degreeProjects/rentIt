@@ -34,17 +34,24 @@ class UserModel {
     }
 
 
-    fun addUser(user: User, completion: Completion) {
+//    fun addUser(user: User, completion: Completion) {
+//        Log.d(TAG, "add user: $user")
+//        firebaseDB.collection(USERS_COLLECTION_PATH)
+//            .document(user.id)
+//            .set(user.toJson)
+//            .addOnSuccessListener { documentReference ->
+//            completion()
+//        }
+//            .addOnFailureListener { e ->
+//                completion()
+//            }
+//    }
+
+    suspend fun addUser(user: User) {
         Log.d(TAG, "add user: $user")
         firebaseDB.collection(USERS_COLLECTION_PATH)
             .document(user.id)
-            .set(user.toJson)
-            .addOnSuccessListener { documentReference ->
-            completion()
-        }
-            .addOnFailureListener { e ->
-                completion()
-            }
+            .set(user.toJson).await()
     }
 
     suspend fun updateMe(updateUserInput: UpdateUserInput) {
