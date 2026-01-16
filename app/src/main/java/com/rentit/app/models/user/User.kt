@@ -34,6 +34,7 @@ data class User(
 
     val toJson: Map<String, Any>
         get() = hashMapOf(
+            ID_KEY to id,
             NAME_KEY to name,
             PHONE_NUMBER_KEY to phoneNumber,
             EMAIL_KEY to email,
