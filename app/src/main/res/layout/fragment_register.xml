@@ -25,15 +25,16 @@
 
         <Button
             android:id="@+id/btnRegisterFragmentAddImage"
-            android:layout_width="124dp"
-            android:layout_height="48dp"
-            android:layout_marginTop="0dp"
+            android:layout_width="112dp"
+            android:layout_height="45dp"
+            android:layout_marginTop="4dp"
             android:paddingHorizontal="24dp"
             android:paddingVertical="8dp"
             android:text="Add Image"
             android:textSize="14sp"
+            app:cornerRadius="22dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivRegisterFragmentUserAvatar" />
 
@@ -109,8 +110,9 @@
             android:layout_marginBottom="24dp"
             android:text="Register"
             android:textColor="#FFFFFF"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textStyle="bold"
+            app:cornerRadius="22dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
