@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.rentit.app-mergeDebugResources-49:/values-port/values-port.xml",
+            "outputFile": "com.rentit.app-mergeDebugResources-63:/values-port/values-port.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\benbe\\.gradle\\caches\\8.13\\transforms\\5bd2857ce4ca1f0aa538a9e9c1a9306c\\transformed\\appcompat-1.7.1\\res\\values-port\\values-port.xml",
+                    "source": "C:\\Users\\benbe\\.gradle\\caches\\8.13\\transforms\\9ce4ac8a22e22c33a63fe0909017981d\\transformed\\appcompat-1.7.1\\res\\values-port\\values-port.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

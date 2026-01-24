@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.rentit.app-mergeDebugResources-49:/values-sw600dp-v13/values-sw600dp-v13.xml",
+            "outputFile": "com.rentit.app-mergeDebugResources-63:/values-sw600dp-v13/values-sw600dp-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\benbe\\.gradle\\caches\\8.13\\transforms\\bfba173a44dc5610fc30976f9c20d324\\transformed\\material-1.13.0\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+                    "source": "C:\\Users\\benbe\\.gradle\\caches\\8.13\\transforms\\366c4256eef5d43412ea858f5e1cee51\\transformed\\material-1.13.0\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,10,11,12,13,14",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "C:\\Users\\benbe\\.gradle\\caches\\8.13\\transforms\\5bd2857ce4ca1f0aa538a9e9c1a9306c\\transformed\\appcompat-1.7.1\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
+                    "source": "C:\\Users\\benbe\\.gradle\\caches\\8.13\\transforms\\9ce4ac8a22e22c33a63fe0909017981d\\transformed\\appcompat-1.7.1\\res\\values-sw600dp-v13\\values-sw600dp-v13.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9",
                         "startColumns": "4,4,4,4,4,4,4,4",
