@@ -99,8 +99,9 @@ class RegisterFragment : Fragment() {
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
                     val authResult = AuthModel.instance.signUp(emailTextField.text.toString(), passwordTextField.text.toString())
-                    val userId = authResult.user!!.uid
-                    val avatarUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(avatarUri!!, FirebaseStorageModel.USERS_PATH)
+                    val userId = authResult.user?.uid ?: return@launch
+                    val currentAvatarUri = avatarUri ?: return@launch
+                    val avatarUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(currentAvatarUri, FirebaseStorageModel.USERS_PATH)
                     val user = User(userId, nameTextField.text.toString(),phoneNumberTextField.text.toString(), emailTextField.text.toString(), avatarUrl)
                     UserModel.instance.addUser(user)
                     withContext(Dispatchers.Main) {
