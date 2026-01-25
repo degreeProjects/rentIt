@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:padding="12dp"
-            android:hint="Full Name"
+            android:hint="Name"
             android:background="@android:drawable/editbox_background"
             android:inputType="textPersonName"
             android:textSize="16sp"

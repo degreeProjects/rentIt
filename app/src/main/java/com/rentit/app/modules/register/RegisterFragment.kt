@@ -16,7 +16,6 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
 import com.rentit.app.R
 import com.rentit.app.base.MyApplication
 import com.rentit.app.models.FirebaseStorageModel
@@ -28,6 +27,7 @@ import com.rentit.app.models.user.UserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.navigation.findNavController
 
 class RegisterFragment : Fragment() {
     companion object {
@@ -35,7 +35,6 @@ class RegisterFragment : Fragment() {
     }
 
     private var _binding: FragmentRegisterBinding? = null
-    private val binding get() = _binding!!
 
     private lateinit var userImageView: ImageView
     private lateinit var nameTextField: EditText
@@ -60,13 +59,15 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        val binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        _binding = binding
         setupUi()
 
         return binding.root
     }
 
     private fun setupUi() {
+        val binding = _binding ?: return
         userImageView = binding.ivRegisterFragmentUserAvatar
         nameTextField = binding.etRegisterFragmentName
         emailTextField = binding.etRegisterFragmentEmail
@@ -103,7 +104,7 @@ class RegisterFragment : Fragment() {
                     val user = User(userId, nameTextField.text.toString(),phoneNumberTextField.text.toString(), emailTextField.text.toString(), avatarUrl)
                     UserModel.instance.addUser(user)
                     withContext(Dispatchers.Main) {
-                        Navigation.findNavController(view).popBackStack(R.id.loginFragment, false)
+                        view.findNavController().popBackStack(R.id.loginFragment, false)
                     }
                 } catch (e: Exception) {
                     Log.e(TAG, "An unexpected error occurred: ${e.message}")
@@ -127,7 +128,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun onSignInButtonClicked(view: View) {
-        Navigation.findNavController(view).popBackStack()
+        view.findNavController().popBackStack()
     }
 
     override fun onDestroy() {
