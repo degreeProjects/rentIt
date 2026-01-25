@@ -8,7 +8,6 @@
     android:background="#FFFFFF">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/registerFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="24dp">
@@ -17,6 +16,7 @@
             android:id="@+id/ivRegisterFragmentUserAvatar"
             android:layout_width="334dp"
             android:layout_height="139dp"
+            android:layout_marginTop="44dp"
             android:scaleType="centerInside"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.482"

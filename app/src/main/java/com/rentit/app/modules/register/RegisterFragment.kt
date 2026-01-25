@@ -77,12 +77,12 @@ class RegisterFragment : Fragment() {
         registerButton = binding.btnRegisterFragment
         signInButton = binding.btnRegisterFragmentSignIn
 
-        addImageBtn.setOnClickListener(::onAddImageButtonClicked)
+        addImageBtn.setOnClickListener { onAddImageButtonClicked() }
         registerButton.setOnClickListener(::onRegisterButtonClicked)
         signInButton.setOnClickListener(::onSignInButtonClicked)
     }
 
-    private fun onAddImageButtonClicked(view: View) {
+    private fun onAddImageButtonClicked() {
         val imagePickerIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
         addImageLauncher.launch(imagePickerIntent)
