@@ -74,7 +74,7 @@ class RegisterFragment : Fragment() {
         passwordTextField = binding.etRegisterFragmentPassword
         phoneNumberTextField = binding.etRegisterFragmentPhoneNumber
         addImageBtn = binding.btnRegisterFragmentAddImage
-        registerButton = binding.btnRegisterFragmentRegister
+        registerButton = binding.btnRegisterFragment
         signInButton = binding.btnRegisterFragmentSignIn
 
         addImageBtn.setOnClickListener(::onAddImageButtonClicked)
