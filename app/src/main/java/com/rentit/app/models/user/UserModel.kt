@@ -13,11 +13,11 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class UserModel {
+class UserModel private constructor() {
     private val firebaseDB = FireStoreModel.instance.db
     var currentUser: User? = null
 
-    private companion object {
+    companion object {
         const val TAG = "UserModel"
         const val USERS_COLLECTION_PATH = "users"
         val instance: UserModel = UserModel()
