@@ -5,7 +5,7 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
-//import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -16,9 +16,9 @@ class AppActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app)
 
-//        val navHostFragment: NavHostFragment? =
-//            supportFragmentManager.findFragmentById(R.id.navHostAppFragment) as? NavHostFragment
-//        navController = navHostFragment?.navController
+        val navHostFragment: NavHostFragment? =
+            supportFragmentManager.findFragmentById(R.id.navHostAppFragment) as? NavHostFragment
+        navController = navHostFragment?.navController
 
         val bottomNavigationView: BottomNavigationView =
             findViewById(R.id.mainActivityBottomNavigationView)
