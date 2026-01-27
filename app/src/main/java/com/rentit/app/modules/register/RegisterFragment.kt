@@ -74,15 +74,15 @@ class RegisterFragment : Fragment() {
         passwordTextField = binding.etRegisterFragmentPassword
         phoneNumberTextField = binding.etRegisterFragmentPhoneNumber
         addImageBtn = binding.btnRegisterFragmentAddImage
-        registerButton = binding.btnRegisterFragmentRegister
+        registerButton = binding.btnRegisterFragment
         signInButton = binding.btnRegisterFragmentSignIn
 
-        addImageBtn.setOnClickListener(::onAddImageButtonClicked)
+        addImageBtn.setOnClickListener { onAddImageButtonClicked() }
         registerButton.setOnClickListener(::onRegisterButtonClicked)
         signInButton.setOnClickListener(::onSignInButtonClicked)
     }
 
-    private fun onAddImageButtonClicked(view: View) {
+    private fun onAddImageButtonClicked() {
         val imagePickerIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
         addImageLauncher.launch(imagePickerIntent)
@@ -99,8 +99,9 @@ class RegisterFragment : Fragment() {
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
                     val authResult = AuthModel.instance.signUp(emailTextField.text.toString(), passwordTextField.text.toString())
-                    val userId = authResult.user!!.uid
-                    val avatarUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(avatarUri!!, FirebaseStorageModel.USERS_PATH)
+                    val userId = authResult.user?.uid ?: return@launch
+                    val currentAvatarUri = avatarUri ?: return@launch
+                    val avatarUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(currentAvatarUri, FirebaseStorageModel.USERS_PATH)
                     val user = User(userId, nameTextField.text.toString(),phoneNumberTextField.text.toString(), emailTextField.text.toString(), avatarUrl)
                     UserModel.instance.addUser(user)
                     withContext(Dispatchers.Main) {

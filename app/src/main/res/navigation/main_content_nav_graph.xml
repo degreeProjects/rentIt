@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content_nav_graph"
+    app:startDestination="@id/apartmentsFragment">
+    <fragment
+        android:id="@+id/apartmentsFragment"
+        android:name="com.rentit.app.modules.apartments.ApartmentsFragment"
+        android:label="fragment_apartments"
+        tools:layout="@layout/fragment_apartments">
+        <action
+            android:id="@+id/action_apartmentsFragment_to_expandedApartmentFragment"
+            app:destination="@id/expandedApartmentFragment"
+            app:popUpTo="@id/apartmentsFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_apartmentsFragment_to_editApartmentFragment"
+            app:destination="@id/editApartmentFragment"
+            app:popUpTo="@id/apartmentsFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/addApartmentFragment"
+        android:name="com.rentit.app.modules.upsertApartment.addApartment.AddApartmentFragment"
+        android:label="fragment_add_apartment"
+        tools:layout="@layout/fragment_base_upsert_apartment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        android:name="com.rentit.app.modules.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/likedApartmentsFragment"
+        android:name="com.rentit.app.modules.apartments.likedApartments.LikedApartmentsFragment"
+        android:label="fragment_liked_apartments"
+        tools:layout="@layout/fragment_apartments">
+        <action
+            android:id="@+id/action_likedApartmentsFragment_to_expandedApartmentFragment"
+            app:destination="@id/expandedApartmentFragment"
+            app:popUpTo="@id/likedApartmentsFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_likedApartmentsFragment_to_editApartmentFragment"
+            app:destination="@id/editApartmentFragment"
+            app:popUpTo="@id/likedApartmentsFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/myApartmentsFragment"
+        android:name="com.rentit.app.modules.apartments.myApartments.MyApartmentsFragment"
+        android:label="fragment_my_apartments"
+        tools:layout="@layout/fragment_apartments">
+        <action
+            android:id="@+id/action_MyApartmentsFragment_to_expandedApartmentFragment"
+            app:destination="@id/expandedApartmentFragment"
+            app:popUpTo="@id/myApartmentsFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_myApartmentsFragment_to_editApartmentFragment"
+            app:destination="@id/editApartmentFragment"
+            app:popUpTo="@id/myApartmentsFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/expandedApartmentFragment"
+        android:name="com.rentit.app.modules.expandedApartment.ExpandedApartmentFragment"
+        android:label="fragment_expanded_apartment"
+        tools:layout="@layout/fragment_expanded_apartment">
+        <argument
+            android:name="apartmentId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/editApartmentFragment"
+        android:name="com.rentit.app.modules.upsertApartment.editApartment.EditApartmentFragment"
+        android:label="fragment_edit_apartment"
+        tools:layout="@layout/fragment_base_upsert_apartment">
+        <argument
+            android:name="apartmentId"
+            app:argType="string" />
+    </fragment>
+</navigation>
