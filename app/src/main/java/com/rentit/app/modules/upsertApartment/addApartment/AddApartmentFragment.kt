@@ -1,0 +1,9 @@
+package com.rentit.app.modules.upsertApartment.addApartment // Package for "add apartment" feature module
+
+
+import com.rentit.app.modules.upsertApartment.base.BaseUpsertApartmentFragment // Base fragment that contains shared upsert UI/logic
+
+
+// Fragment for adding a new apartment/sublet (uses the shared upsert UI)
+class AddApartmentFragment : BaseUpsertApartmentFragment("AddApartmentFragment") { // Pass a tag for logging/debugging
+} // No extra behavior needed for "add" flow (base handles it)
