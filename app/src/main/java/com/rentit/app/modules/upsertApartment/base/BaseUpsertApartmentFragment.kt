@@ -1,36 +1,48 @@
 package com.rentit.app.modules.upsertApartment.base // Package for shared upsert apartment UI/logic
 
-import android.annotation.SuppressLint // Used for suppressing lint warnings (e.g., SetTextI18n)
-import android.app.Activity // Used for Activity.RESULT_OK check
-import android.app.DatePickerDialog // Used to show date pickers
-import android.content.Intent // Used to launch image picker intent
-import android.graphics.Bitmap // Used when loading image bitmap via Picasso Target
-import android.graphics.drawable.Drawable // Used for Picasso callbacks
-import android.net.Uri // Used to store selected image Uri / parse image URLs
-import android.os.Bundle // Fragment lifecycle state
-import android.provider.MediaStore // Used for external content image picker
-import android.util.Log // Logging
-import android.view.LayoutInflater // Inflate fragment view
-import android.view.View // View references + callbacks
-import android.view.ViewGroup // Parent container for fragment view
-import android.widget.ArrayAdapter // Adapter for spinners
-import android.widget.Button // Button reference
-import android.widget.EditText // Text input reference
-import android.widget.ImageButton // Image button references
-import android.widget.ProgressBar // Progress indicator
-import android.widget.Spinner // Spinner references
-import android.widget.TextView // Text view references
-import android.widget.Toast // Toast messages
-import androidx.activity.result.contract.ActivityResultContracts // Activity result APIs for picking image
-import androidx.fragment.app.Fragment // Base Fragment
-import androidx.lifecycle.ViewModelProvider // Instantiate ViewModel
-import androidx.lifecycle.lifecycleScope // Coroutine scope tied to lifecycle
-import androidx.navigation.Navigation // Navigation controller helpers
-import com.squareup.picasso.Picasso // Image loading library
-import com.squareup.picasso.Target // Picasso target for bitmap callbacks
-import kotlinx.coroutines.Dispatchers // Coroutine dispatchers (Main/IO)
-import kotlinx.coroutines.launch // Launch coroutines
-import java.util.Calendar // Used for start/end date selection
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.DatePickerDialog
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
+import android.net.Uri
+import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageButton
+import android.widget.ProgressBar
+import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
+import com.rentit.app.R
+import com.rentit.app.base.MyApplication
+import com.rentit.app.models.FirebaseStorageModel
+import com.rentit.app.utils.RequiredValidation
+import com.rentit.app.databinding.FragmentBaseUpsertApartmentBinding
+import com.rentit.app.models.apartment.Apartment
+import com.rentit.app.models.apartment.ApartmentModel
+import com.rentit.app.models.apartment.Type
+import com.rentit.app.models.auth.AuthModel
+import com.rentit.app.retrofit.RegionsSingelton
+import com.rentit.app.utils.DateUtils
+import com.squareup.picasso.Picasso
+import com.squareup.picasso.Target
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.Calendar
+import androidx.navigation.findNavController
 
 // Shared fragment for both "Add" and "Edit" apartment flows
 abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TAG is used for log messages
@@ -191,7 +203,8 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
             DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth -> // Callback when a date is chosen
                 date.set(year, monthOfYear, dayOfMonth) // Update the provided Calendar instance
                 if (anotherDatePicker) { // If we need to pick another date after this one
-                    setupDatePicker(view, anotherDate!!) // Open next picker (end date) using non-null asserted calendar
+                    val anotherDateSaver = anotherDate ?: return@OnDateSetListener
+                    setupDatePicker(view, anotherDateSaver) // Open next picker (end date) using non-null asserted calendar
                 } else { // Done choosing both dates
                     datesTextView.text = "${DateUtils.formatDate(startDate.timeInMillis)} - ${
                         DateUtils.formatDate(endDate.timeInMillis)
@@ -218,7 +231,8 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
             lifecycleScope.launch(Dispatchers.IO) { // Do IO work (network/storage/db) off main thread
                 try { // Guard all upsert work
                     val title = titleTextField.text.toString() // Read title input
-                    val userId = AuthModel.instance.getUserId()!! // Get current user id (non-null expected)
+                    val userId = AuthModel.instance.getUserId() ?: return@launch // Get current user id (non-null expected)\
+                    val imageUriSaver = imageUri ?: return@launch // Get current image URI (non-null expected)
                     val description = descriptionTextField.text.toString() // Read description input
                     val numOfRooms = roomsTextField.text.toString().toInt() // Parse rooms count
                     val price = priceTextField.text.toString().toInt() // Parse price
@@ -236,13 +250,13 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
                         apartment.endDate = endDate.timeInMillis // Update end date
 
                         if (imageUri != Uri.parse(apartment.imageUrl)) { // Only re-upload if image was changed
-                            val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(imageUri!!, FirebaseStorageModel.APARTMENTS_PATH) // Upload to Firebase Storage
+                            val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(imageUriSaver, FirebaseStorageModel.APARTMENTS_PATH) // Upload to Firebase Storage
                             apartment.imageUrl = imageUrl // Save new image URL
                         }
 
                         ApartmentModel.instance.updateApartment(apartment) // Persist updated apartment
                     } else { // Add flow: create new apartment object
-                        val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(imageUri!!, FirebaseStorageModel.APARTMENTS_PATH) // Upload selected image
+                        val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(imageUriSaver, FirebaseStorageModel.APARTMENTS_PATH) // Upload selected image
                         val newApartment = Apartment("", userId, title, price, description, location, Type.valueOf(type), numOfRooms, startDate.timeInMillis, endDate.timeInMillis, imageUrl) // Build new apartment model
                         ApartmentModel.instance.addApartment(newApartment) // Persist new apartment
                     }
