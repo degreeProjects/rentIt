@@ -264,14 +264,14 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
                     lifecycleScope.launch(Dispatchers.Main) { // Switch back to main thread for UI + navigation
                         if (apartment == null) { // Add success path
                             Toast.makeText(
-                                MyApplication.Globals.appContext, // App context
+                                requireContext(), // App context
                                 "sublet uploaded successfully", // Success message
                                 Toast.LENGTH_SHORT, // Duration
                             ).show() // Show toast
                             Navigation.findNavController(view).popBackStack(R.id.apartmentsFragment, false) // Navigate back to apartments list
                         } else { // Edit success path
                             Toast.makeText(
-                                MyApplication.Globals.appContext, // App context
+                                requireContext(), // App context
                                 "sublet updated successfully", // Success message
                                 Toast.LENGTH_SHORT, // Duration
                             ).show() // Show toast
@@ -280,17 +280,19 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
                     }
                 } catch (e: Exception) { // Catch any unexpected exception from parsing/upload/db
                     Log.e(TAG, "An unexpected error occurred: ${e.message}") // Log error message
-                    Toast.makeText(
-                        MyApplication.Globals.appContext, // App context
-                        if (apartment == null) "failed to upload sublet" else "failed to update sublet", // Failure message based on mode
-                        Toast.LENGTH_SHORT, // Duration
-                    ).show() // Show toast (note: this is called on IO dispatcher as-is)
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        Toast.makeText(
+                            requireContext(), // App context
+                            if (apartment == null) "failed to upload sublet" else "failed to update sublet", // Failure message based on mode
+                            Toast.LENGTH_SHORT, // Duration
+                        ).show() // Show toast
+                    }
                 }
             }
         } else { // Validation failed path
             Log.e(TAG, "some of the apartment details are missing") // Log missing fields
             Toast.makeText(
-                MyApplication.Globals.appContext, // App context
+                requireContext(), // App context
                 "missing some sublet details", // User-facing message
                 Toast.LENGTH_SHORT, // Duration
             ).show() // Show toast

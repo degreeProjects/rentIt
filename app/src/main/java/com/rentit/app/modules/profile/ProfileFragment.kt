@@ -128,14 +128,14 @@ class ProfileFragment : Fragment() {
             val updateUserInput = UpdateUserInput(name, phoneNumber, avatarUrl)
             viewModel.updateCurrentUser(updateUserInput, avatarUri)
             Toast.makeText(
-                MyApplication.Globals.appContext,
+                requireContext(),
                 "details updated",
                 Toast.LENGTH_SHORT,
             ).show()
         } else {
             Log.e(TAG, "missing some user details")
             Toast.makeText(
-                MyApplication.Globals.appContext,
+                requireContext(),
                 "you must fill all the fields",
                 Toast.LENGTH_SHORT,
             ).show()

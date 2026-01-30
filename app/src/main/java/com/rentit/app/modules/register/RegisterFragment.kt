@@ -111,7 +111,7 @@ class RegisterFragment : Fragment() {
                     Log.e(TAG, "An unexpected error occurred: ${e.message}")
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
-                            MyApplication.Globals.appContext,
+                            requireContext(),
                             e.message,
                             Toast.LENGTH_SHORT,
                         ).show()
@@ -121,7 +121,7 @@ class RegisterFragment : Fragment() {
         } else {
             Log.e(TAG, "some of the registration details are missing")
             Toast.makeText(
-                MyApplication.Globals.appContext,
+                requireContext(),
                 "missing some registration details",
                 Toast.LENGTH_SHORT,
             ).show()

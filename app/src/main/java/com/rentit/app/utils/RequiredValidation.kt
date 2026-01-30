@@ -29,7 +29,7 @@ class RequiredValidation {
                     }
                 }
                 "name" -> {
-                    if(value.length < 3 || !value.all { it.isLetter() }) {
+                    if (value.length < 3 || !value.all { it.isLetter() || it.isWhitespace() }) {
                         et.error = "Enter a valid name"
                         return false
                     }

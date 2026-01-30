@@ -79,7 +79,7 @@ class LoginFragment : Fragment() {
                     Log.e(RegisterFragment.TAG, "An unexpected error occurred: ${e.message}")
                     withContext(Dispatchers.Main) {
                         Toast.makeText(
-                            MyApplication.Globals.appContext,
+                            requireContext(),
                             "some of the login details are incorrect",
                             Toast.LENGTH_SHORT,
                         ).show()
@@ -89,7 +89,7 @@ class LoginFragment : Fragment() {
         } else {
             Log.e(TAG, "some of the login details are missing")
             Toast.makeText(
-                MyApplication.Globals.appContext,
+                requireContext(),
                 "missing some login details",
                 Toast.LENGTH_SHORT,
             ).show()
