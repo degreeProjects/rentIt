@@ -1,4 +1,4 @@
-package com.rentit.app.modules.upsertApartment.base // Package for shared upsert apartment UI/logic
+package com.rentit.app.modules.upsertApartment.base
 
 import android.annotation.SuppressLint
 import android.app.Activity

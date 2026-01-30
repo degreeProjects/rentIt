@@ -1,4 +1,4 @@
-package com.rentit.app.modules.upsertApartment.addApartment // Package for "add apartment" feature module
+package com.rentit.app.modules.upsertApartment.addApartment
 
 
 import com.rentit.app.modules.upsertApartment.base.BaseUpsertApartmentFragment // Base fragment that contains shared upsert UI/logic

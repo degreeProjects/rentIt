@@ -17,6 +17,7 @@ room = "2.8.4"
 googleServices = "4.4.2"
 firebaseBom = "34.7.0"
 retrofit="2.9.0"
+swiperefreshlayout="1.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,6 +35,7 @@ firebase-storage = { module = "com.google.firebase:firebase-storage" }
 
 gson-converter = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+swiperefreshlayout = {module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

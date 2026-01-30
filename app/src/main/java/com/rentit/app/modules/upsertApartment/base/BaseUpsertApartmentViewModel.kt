@@ -1,4 +1,4 @@
-package com.rentit.app.modules.upsertApartment.base // Package for shared upsert apartment ViewModel
+package com.rentit.app.modules.upsertApartment.base
 
 import androidx.lifecycle.LiveData // LiveData type for observing apartment changes
 import androidx.lifecycle.ViewModel // Base ViewModel class

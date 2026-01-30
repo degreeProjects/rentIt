@@ -5,7 +5,6 @@
     android:id="@+id/expandedApartmentLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/app_gradient_background"
     tools:context=".modules.expandedApartment.ExpandedApartmentFragment">
 
     <ProgressBar
@@ -33,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="@color/black"
+            android:background="@color/white"
             android:src="?attr/homeAsUpIndicator"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -183,7 +182,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:background="@drawable/black_rounded_corner"
             android:ems="10"
             android:inputType="textMultiLine"
             android:lines="5"

@@ -8,17 +8,17 @@
     tools:layout_editor_absoluteX="-30dp"
     tools:layout_editor_absoluteY="6dp">
 
-<!--    <androidx.fragment.app.FragmentContainerView-->
-<!--        android:id="@+id/navHostAppFragment"-->
-<!--        android:name="androidx.navigation.fragment.NavHostFragment"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:defaultNavHost="true"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/mainActivityBottomNavigationView"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:navGraph="@navigation/main_content_nav_graph" />-->
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/navHostAppFragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@+id/mainActivityBottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:navGraph="@navigation/main_content_nav_graph" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mainActivityBottomNavigationView"

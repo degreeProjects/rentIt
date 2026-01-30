@@ -45,8 +45,6 @@ android {
 
 dependencies {
 
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0")
-
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
     implementation(platform(libs.firebase.bom))
@@ -72,5 +70,6 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.retrofit)
     implementation(libs.gson.converter)
+    implementation(libs.swiperefreshlayout)
 }
 
