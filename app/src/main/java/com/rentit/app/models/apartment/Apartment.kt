@@ -1,5 +1,6 @@
 package com.rentit.app.models.apartment
 
+import android.util.Log
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
@@ -41,18 +42,35 @@ data class Apartment(
         private const val IMAGE_URL_KEY = "imageUrl"
 
         fun fromJson(json: Map<String, Any>): Apartment {
+            Log.d("Apartment", "Parsing apartment from JSON: $json")
+            
             val id = json[ID_KEY] as? String ?: ""
             val title = json[TITLE_KEY] as? String ?: ""
             val userId = json[USER_ID_KEY] as? String ?: ""
             val pricePerNight = (json[PRICE_PER_NIGHT_KEY] as? Long)?.toInt() ?: 0
             val description = json[DESCRIPTION_KEY] as? String ?: ""
             val city = json[CITY_KEY] as? String ?: ""
-            val type = Type.valueOf(json[TYPE_KEY] as String) as? Type ?: Type.House
+            
+            // Safe type parsing - handles null, missing, or invalid type values
+            val typeString = json[TYPE_KEY] as? String
+            val type = if (typeString != null) {
+                try {
+                    Type.valueOf(typeString)
+                } catch (e: IllegalArgumentException) {
+                    Log.w("Apartment", "Unknown type value: $typeString, defaulting to House")
+                    Type.House
+                }
+            } else {
+                Log.w("Apartment", "Type is null, defaulting to House")
+                Type.House
+            }
+            
             val numOfRooms = (json[NUM_OF_ROOMS_KEY] as? Long)?.toInt() ?: 0
             val startDate = json[START_DATE_KEY] as? Long ?: 0
             val endDate = json[END_DATE_KEY] as? Long ?: 0
             val imageUrl = json[IMAGE_URL_KEY] as? String ?: ""
 
+            Log.d("Apartment", "Successfully parsed apartment: id=$id, title=$title")
             return Apartment(id, userId, title, pricePerNight, description, city, type, numOfRooms, startDate, endDate, imageUrl)
         }
     }
@@ -64,7 +82,7 @@ data class Apartment(
             PRICE_PER_NIGHT_KEY to pricePerNight,
             DESCRIPTION_KEY to description,
             CITY_KEY to city,
-            TYPE_KEY to type,
+            TYPE_KEY to type.name,
             NUM_OF_ROOMS_KEY to numOfRooms,
             START_DATE_KEY to startDate,
             END_DATE_KEY to endDate,

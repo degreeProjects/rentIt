@@ -1,5 +1,6 @@
 package com.rentit.app.modules.apartments
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,20 +36,27 @@ class ApartmentsViewModel: ViewModel() {
 
     fun getAllApartments(): MutableList<Apartment> {
         val allApartments = mutableListOf<Apartment>()
-        val currentUser = UserModel.instance.currentUser ?: return allApartments
+        val currentUser = UserModel.instance.currentUser
+        
+        Log.d("ApartmentsViewModel", "getAllApartments called, currentUser: ${currentUser?.id ?: "null"}")
+        Log.d("ApartmentsViewModel", "apartments LiveData value size: ${apartments?.value?.size ?: 0}")
 
         for (apartment in apartments?.value ?: mutableListOf()) {
-            if (currentUser.likedApartments.contains(apartment.id)) {
-                apartment.liked = true
-            }
+            // Only set liked/isMine flags if user is logged in
+            if (currentUser != null) {
+                if (currentUser.likedApartments.contains(apartment.id)) {
+                    apartment.liked = true
+                }
 
-            if (currentUser.id == apartment.userId) {
-                apartment.isMine = true
+                if (currentUser.id == apartment.userId) {
+                    apartment.isMine = true
+                }
             }
 
             allApartments.add(apartment)
         }
-
+        
+        Log.d("ApartmentsViewModel", "Returning ${allApartments.size} apartments")
         return allApartments
     }
 

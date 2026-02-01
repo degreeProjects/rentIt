@@ -38,13 +38,16 @@ abstract class BaseApartmentsFragment : Fragment() {
 
         progressBar = binding.progressBar
 
+        // Set up RecyclerView immediately to avoid "No adapter attached" warning
+        recyclerView = binding.rvApartmentsFragmentList
+        recyclerView.setHasFixedSize(true)
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
         lifecycleScope.launch {
             preparations()
             viewModel.setAllApartments()
 
-            recyclerView = binding.rvApartmentsFragmentList
-            recyclerView.setHasFixedSize(true)
-            recyclerView.layoutManager = LinearLayoutManager(context)
+            // Set up adapter after data is ready
             adapter = setupApartmentsAdapter()
             adapter.listener = setupApartmentsAdapterListener()
             recyclerView.adapter = adapter

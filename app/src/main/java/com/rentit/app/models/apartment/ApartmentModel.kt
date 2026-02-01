@@ -55,15 +55,34 @@ class ApartmentModel private constructor() {
         try {
             //Update state to loading
             apartmentsListLoadingState.postValue(LoadingState.LOADING)
+            Log.d("ApartmentRepo", "Starting to fetch apartments from Firebase...")
 
             //Fetch data from Firestore using
             val snapshot = firebaseDB.collection(APARTMENTS_COLLECTION_PATH).get().await()
+            Log.d("ApartmentRepo", "Firebase returned ${snapshot.documents.size} documents")
 
-            // Map the documents
-            val apartments = snapshot.documents.map { Apartment.fromJson(it.data ?: emptyMap()) }
+            // Map the documents and include document ID
+            val apartments = snapshot.documents.mapNotNull { doc ->
+                try {
+                    doc.data?.let { data ->
+                        Log.d("ApartmentRepo", "Processing document: ${doc.id}")
+                        val jsonMap = data.toMutableMap()
+                        jsonMap["id"] = doc.id // Add document ID from Firestore
+                        Apartment.fromJson(jsonMap)
+                    }
+                } catch (e: Exception) {
+                    Log.e("ApartmentRepo", "Error parsing document ${doc.id}: ${e.message}", e)
+                    null
+                }
+            }
+            
+            Log.d("ApartmentRepo", "Successfully parsed ${apartments.size} apartments")
 
             // Update the Room database
-            roomDB.apartmentDao().updateAllApartments(apartments)
+            withContext(Dispatchers.IO) {
+                roomDB.apartmentDao().updateAllApartments(apartments)
+            }
+            Log.d("ApartmentRepo", "Apartments saved to Room database")
 
             // Finalize loading state
             apartmentsListLoadingState.postValue(LoadingState.LOADED)

@@ -22,13 +22,19 @@ class ApartmentsFragment : BaseApartmentsFragment() {
     }
 
     override fun setupApartmentsAdapter(): ApartmentsRecyclerAdapter {
-        return ApartmentsRecyclerAdapter(viewModel.getAllApartments(), viewModel, onEditClick)
+        val apartments = viewModel.getAllApartments()
+        Log.d(TAG, "setupApartmentsAdapter: Creating adapter with ${apartments.size} apartments")
+        return ApartmentsRecyclerAdapter(apartments, viewModel, onEditClick)
     }
 
     override fun observeApartments() {
-        viewModel.apartments?.observe(viewLifecycleOwner) {
+        Log.d(TAG, "observeApartments: Setting up observer, apartments LiveData is ${if (viewModel.apartments != null) "not null" else "null"}")
+        viewModel.apartments?.observe(viewLifecycleOwner) { apartmentList ->
+            Log.d(TAG, "observeApartments: LiveData triggered with ${apartmentList?.size ?: 0} apartments")
             progressBar.visibility = View.VISIBLE
-            adapter.apartments = viewModel.getAllApartments()
+            val updatedApartments = viewModel.getAllApartments()
+            Log.d(TAG, "observeApartments: Updating adapter with ${updatedApartments.size} apartments")
+            adapter.apartments = updatedApartments
             adapter.notifyDataSetChanged()
             progressBar.visibility = View.GONE
         }

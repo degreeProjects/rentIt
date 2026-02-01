@@ -8,7 +8,9 @@ plugins {
 
 android {
     namespace = "com.rentit.app"
-    compileSdk = 36
+    compileSdk {
+        version = release(36)
+    }
 
     defaultConfig {
         applicationId = "com.rentit.app"
@@ -49,6 +51,7 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.storage)
+    implementation(libs.play.services.base)
 
     implementation(libs.androidx.room.runtime)
     kapt(libs.androidx.room.compiler)
