@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    
+    <item
+        android:id="@+id/likedApartmentsFragment"
+        android:icon="@drawable/like_button_nav"
+        android:title="Liked"
+        app:showAsAction="always"
+        app:iconTint="@android:color/white" />
+    
+    <item
+        android:id="@+id/addApartmentFragment"
+        android:icon="@drawable/plus_button_nav"
+        android:title="Add"
+        app:showAsAction="always"
+        app:iconTint="@android:color/white" />
+    
+    <item
+        android:id="@+id/apartmentsFragment"
+        android:icon="@drawable/ic_home_top_nav"
+        android:title="All Apartments"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/myApartmentsFragment"
+        android:icon="@drawable/ic_listings_top_nav"
+        android:title="My Apartments"
+        app:showAsAction="never" />
+    
+    <item
+        android:id="@+id/profileFragment"
+        android:icon="@drawable/ic_profile_top_nav"
+        android:title="Profile"
+        app:showAsAction="never" />
+    
+</menu>
+
