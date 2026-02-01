@@ -1,35 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    
     <item
         android:id="@+id/likedApartmentsFragment"
         android:icon="@drawable/like_button_nav"
-        android:title=""
-        app:showAsAction="ifRoom" />
+        android:title="Liked apartments" />
+    
     <item
         android:id="@+id/addApartmentFragment"
         android:icon="@drawable/plus_button_nav"
-        android:title=""
-        android:visible="true"
-        app:showAsAction="ifRoom"
-        />
+        android:title="Add Apartment" />
+    
     <item
         android:id="@+id/apartmentsFragment"
         android:icon="@drawable/home_button_nav"
-        android:title=""
-        app:showAsAction="ifRoom"
-        />
+        android:title="Home" />
+    
     <item
         android:id="@+id/myApartmentsFragment"
         android:icon="@drawable/listings_button_nav"
-        android:title=""
-        app:showAsAction="ifRoom"
-        />
+        android:title="My Apartments" />
+    
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/profile_button_nav"
-        android:title=""
-        app:showAsAction="ifRoom"
-        />
+        android:title="Profile" />
+        
 </menu>

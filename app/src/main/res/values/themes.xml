@@ -11,7 +11,14 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <!-- Show icons in overflow menu -->
+        <item name="actionOverflowMenuStyle">@style/OverflowMenuStyle</item>
         <!-- Customize your theme here. -->
+    </style>
+    
+    <!-- Style to show icons in overflow menu -->
+    <style name="OverflowMenuStyle" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:dropDownSelector">@android:color/white</item>
     </style>
 </resources>
 

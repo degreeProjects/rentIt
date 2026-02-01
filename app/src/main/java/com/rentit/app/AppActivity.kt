@@ -26,8 +26,21 @@ class AppActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        super.onCreateOptionsMenu(menu)
-        menuInflater.inflate(R.menu.bottom_nav_menu, menu)
+        menuInflater.inflate(R.menu.top_app_bar_menu, menu)
+        
+        // Force show icons in overflow menu
+        if (menu != null) {
+            if (menu.javaClass.simpleName == "MenuBuilder") {
+                try {
+                    val method = menu.javaClass.getDeclaredMethod("setOptionalIconsVisible", Boolean::class.javaPrimitiveType)
+                    method.isAccessible = true
+                    method.invoke(menu, true)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+        }
+        
         return true
     }
 
