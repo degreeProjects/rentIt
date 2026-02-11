@@ -228,6 +228,8 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
         val isValidPrice = RequiredValidation.validateRequiredTextField(priceTextField, "price") // Validate price
 
         if (isValidTitle && isValidDescription && isValidRooms && isValidPrice) { // Proceed only if all inputs are valid
+            progressBar.visibility = View.VISIBLE // Show loading spinner
+            layout.visibility = View.GONE // Hide form while uploading
             lifecycleScope.launch(Dispatchers.IO) { // Do IO work (network/storage/db) off main thread
                 try { // Guard all upsert work
                     val title = titleTextField.text.toString() // Read title input
@@ -287,6 +289,8 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
                 } catch (e: Exception) { // Catch any unexpected exception from parsing/upload/db
                     Log.e(TAG, "An unexpected error occurred: ${e.message}") // Log error message
                     lifecycleScope.launch(Dispatchers.Main) {
+                        progressBar.visibility = View.GONE // Hide loading spinner on error
+                        layout.visibility = View.VISIBLE // Show form again so user can retry
                         Toast.makeText(
                             requireContext(), // App context
                             if (apartment == null) "failed to upload sublet" else "failed to update sublet", // Failure message based on mode
