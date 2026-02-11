@@ -38,16 +38,13 @@ class MyApartmentsFragment : BaseApartmentsFragment() {
     /**
      * Sets up the LiveData observer for the apartments list.
      * When data changes:
-     * 1. Shows a progress bar.
-     * 2. Refreshes the adapter's data set.
-     * 3. Notifies the UI of the change and hides the progress bar.
+     * 1. Refreshes the adapter's data set.
+     * 2. Notifies the UI of the change.
      */
     override fun observeApartments() {
         viewModel.apartments?.observe(viewLifecycleOwner) {
-            progressBar.visibility = View.VISIBLE
             adapter.apartments = viewModel.getMyApartments()
             adapter.notifyDataSetChanged()
-            progressBar.visibility = View.GONE
         }
     }
 

@@ -31,12 +31,10 @@ class ApartmentsFragment : BaseApartmentsFragment() {
         Log.d(TAG, "observeApartments: Setting up observer, apartments LiveData is ${if (viewModel.apartments != null) "not null" else "null"}")
         viewModel.apartments?.observe(viewLifecycleOwner) { apartmentList ->
             Log.d(TAG, "observeApartments: LiveData triggered with ${apartmentList?.size ?: 0} apartments")
-            progressBar.visibility = View.VISIBLE
             val updatedApartments = viewModel.getAllApartments()
             Log.d(TAG, "observeApartments: Updating adapter with ${updatedApartments.size} apartments")
             adapter.apartments = updatedApartments
             adapter.notifyDataSetChanged()
-            progressBar.visibility = View.GONE
         }
     }
 
