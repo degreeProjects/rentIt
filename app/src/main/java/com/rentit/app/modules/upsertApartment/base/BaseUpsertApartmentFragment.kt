@@ -175,6 +175,7 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
             uploadApartmentBtn.setOnClickListener { onUpsertApartmentButtonClicked(it, apartment) } // Submit updates (edit)
         } else { // Add flow (empty UI)
             backButton.visibility = View.GONE // Hide back button in add mode
+            addImageBtn.setImageResource(R.drawable.default_apartment) // Show default apartment image initially
             uploadApartmentBtn.setOnClickListener(::onUpsertApartmentButtonClicked) // Submit new apartment (add)
         }
     }
@@ -225,14 +226,12 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
         val isValidDescription = RequiredValidation.validateRequiredTextField(descriptionTextField, "description") // Validate description
         val isValidRooms = RequiredValidation.validateRequiredTextField(roomsTextField, "rooms") // Validate rooms
         val isValidPrice = RequiredValidation.validateRequiredTextField(priceTextField, "price") // Validate price
-        val isValidPhoto = imageUri != null // Validate image is selected (or exists in edit)
 
-        if (isValidTitle && isValidDescription && isValidRooms && isValidPrice && isValidPhoto) { // Proceed only if all inputs are valid
+        if (isValidTitle && isValidDescription && isValidRooms && isValidPrice) { // Proceed only if all inputs are valid
             lifecycleScope.launch(Dispatchers.IO) { // Do IO work (network/storage/db) off main thread
                 try { // Guard all upsert work
                     val title = titleTextField.text.toString() // Read title input
                     val userId = AuthModel.instance.getUserId() ?: return@launch // Get current user id (non-null expected)\
-                    val imageUriSaver = imageUri ?: return@launch // Get current image URI (non-null expected)
                     val description = descriptionTextField.text.toString() // Read description input
                     val numOfRooms = roomsTextField.text.toString().toInt() // Parse rooms count
                     val price = priceTextField.text.toString().toInt() // Parse price
@@ -249,14 +248,21 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
                         apartment.startDate = startDate.timeInMillis // Update start date
                         apartment.endDate = endDate.timeInMillis // Update end date
 
-                        if (imageUri != Uri.parse(apartment.imageUrl)) { // Only re-upload if image was changed
-                            val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(imageUriSaver, FirebaseStorageModel.APARTMENTS_PATH) // Upload to Firebase Storage
-                            apartment.imageUrl = imageUrl // Save new image URL
+                        // Only re-upload if image was changed
+                        imageUri?.let { uri ->
+                            if (uri != Uri.parse(apartment.imageUrl)) {
+                                val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(uri, FirebaseStorageModel.APARTMENTS_PATH) // Upload to Firebase Storage
+                                apartment.imageUrl = imageUrl // Save new image URL
+                            }
                         }
 
                         ApartmentModel.instance.updateApartment(apartment) // Persist updated apartment
                     } else { // Add flow: create new apartment object
-                        val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(imageUriSaver, FirebaseStorageModel.APARTMENTS_PATH) // Upload selected image
+                        // Use selected image or default apartment drawable
+                        val uploadUri = imageUri ?: Uri.parse(
+                            "android.resource://${requireContext().packageName}/${R.drawable.default_apartment}"
+                        )
+                        val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(uploadUri, FirebaseStorageModel.APARTMENTS_PATH)
                         val newApartment = Apartment("", userId, title, price, description, location, Type.valueOf(type), numOfRooms, startDate.timeInMillis, endDate.timeInMillis, imageUrl) // Build new apartment model
                         ApartmentModel.instance.addApartment(newApartment) // Persist new apartment
                     }

@@ -89,19 +89,25 @@ class ApartmentsViewHolder(itemView: View, adapter: ApartmentsRecyclerAdapter): 
         propertyTypeTextView.text = apartment?.type.toString()
         datesTextView.text = "${DateUtils.formatDate(apartment?.startDate ?: 0)} - ${DateUtils.formatDate(apartment?.endDate ?: 0)}"
 
-        Picasso.get()
-            .load(apartment?.imageUrl)
-            .into(object : Target {
-                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                    image.setImageBitmap(bitmap)
-                }
-                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                    Log.e(TAG, e.toString())
-                }
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    Log.d(TAG, "onPrepareLoad")
-                }
-            })
+        // Only load image if URL is not null or empty
+        if (!apartment?.imageUrl.isNullOrEmpty()) {
+            Picasso.get()
+                .load(apartment?.imageUrl)
+                .into(object : Target {
+                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                        image.setImageBitmap(bitmap)
+                    }
+                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                        Log.e(TAG, e.toString())
+                    }
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                        Log.d(TAG, "onPrepareLoad")
+                    }
+                })
+        } else {
+            // Optionally set a placeholder image when URL is empty
+            image.setImageResource(R.drawable.default_apartment)
+        }
 
         if (apartment?.isMine == true) {
             likeButton.visibility = View.GONE
