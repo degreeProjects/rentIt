@@ -19,14 +19,14 @@ class FirebaseStorageModel {
     suspend fun addImageToFirebaseStorage(uri: Uri, path: String): String {
         return try {
             val filename = UUID.randomUUID().toString()
+            Log.d("FirebaseStorage", "Uploading image: $filename from URI: $uri")
 
             val imagesRef = storage.reference.child("$path/$filename")
             val uploadTask = imagesRef.putFile(uri).await()
             val downloadUrl = uploadTask.storage.downloadUrl.await()
-
             downloadUrl.toString()
         } catch (e: Exception) {
-            Log.e("TAG", "An unexpected error occurred: ${e.message}")
+            Log.e("FirebaseStorage", "Error uploading image: ${e.message}", e)
             ""
         }
     }

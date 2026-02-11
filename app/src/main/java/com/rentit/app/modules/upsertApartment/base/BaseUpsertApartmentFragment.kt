@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -38,7 +36,6 @@ import com.rentit.app.models.auth.AuthModel
 import com.rentit.app.retrofit.RegionsSingelton
 import com.rentit.app.utils.DateUtils
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -157,21 +154,16 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
             startDate.timeInMillis = apartment.startDate // Initialize start date state
             endDate.timeInMillis = apartment.endDate // Initialize end date state
 
-            Picasso.get() // Get Picasso singleton
-                .load(apartment.imageUrl) // Load image from URL
-                .into(object : Target { // Use Target to receive bitmap callbacks
-                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) { // Called when bitmap is ready
-                        addImageBtn.setImageBitmap(bitmap) // Show bitmap in addImageBtn
-                    }
-
-                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) { // Called on failure
-                        Log.e(TAG, e.toString()) // Log the error for debugging
-                    }
-
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) { // Called right before load starts
-                        Log.d(TAG, "onPrepareLoad") // Log load start
-                    }
-                })
+            // Load existing image with Picasso - no placeholder so image waits until fully loaded
+            if (!apartment.imageUrl.isNullOrEmpty()) {
+                Picasso.get()
+                    .load(apartment.imageUrl)
+                    .error(R.drawable.default_apartment)
+                    .into(addImageBtn)
+            } else {
+                addImageBtn.setImageResource(R.drawable.default_apartment)
+            }
+            
             uploadApartmentBtn.setOnClickListener { onUpsertApartmentButtonClicked(it, apartment) } // Submit updates (edit)
         } else { // Add flow (empty UI)
             backButton.visibility = View.GONE // Hide back button in add mode
@@ -265,6 +257,23 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
                             "android.resource://${requireContext().packageName}/${R.drawable.default_apartment}"
                         )
                         val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(uploadUri, FirebaseStorageModel.APARTMENTS_PATH)
+                        Log.d(TAG, "Image uploaded, URL: $imageUrl")
+                        
+                        // Verify image URL is not empty before creating apartment
+                        if (imageUrl.isEmpty()) {
+                            throw Exception("Failed to upload image to Firebase Storage")
+                        }
+                        
+                        // Pre-load the uploaded image into Picasso's cache (blocking call on IO thread)
+                        try {
+                            // Use get() to synchronously download and cache the image
+                            Picasso.get().load(imageUrl).get()
+                            Log.d(TAG, "Image pre-loaded into Picasso cache")
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Failed to pre-load image into cache: ${e.message}")
+                            // Continue anyway - the image will load with a delay
+                        }
+                        
                         val newApartment = Apartment("", userId, title, price, description, location, Type.valueOf(type), numOfRooms, startDate.timeInMillis, endDate.timeInMillis, imageUrl) // Build new apartment model
                         ApartmentModel.instance.addApartment(newApartment) // Persist new apartment
                     }
