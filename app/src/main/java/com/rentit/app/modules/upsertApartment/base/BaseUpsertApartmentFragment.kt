@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -38,7 +36,6 @@ import com.rentit.app.models.auth.AuthModel
 import com.rentit.app.retrofit.RegionsSingelton
 import com.rentit.app.utils.DateUtils
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -157,24 +154,20 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
             startDate.timeInMillis = apartment.startDate // Initialize start date state
             endDate.timeInMillis = apartment.endDate // Initialize end date state
 
-            Picasso.get() // Get Picasso singleton
-                .load(apartment.imageUrl) // Load image from URL
-                .into(object : Target { // Use Target to receive bitmap callbacks
-                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) { // Called when bitmap is ready
-                        addImageBtn.setImageBitmap(bitmap) // Show bitmap in addImageBtn
-                    }
-
-                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) { // Called on failure
-                        Log.e(TAG, e.toString()) // Log the error for debugging
-                    }
-
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) { // Called right before load starts
-                        Log.d(TAG, "onPrepareLoad") // Log load start
-                    }
-                })
+            // Load existing image with Picasso - no placeholder so image waits until fully loaded
+            if (!apartment.imageUrl.isNullOrEmpty()) {
+                Picasso.get()
+                    .load(apartment.imageUrl)
+                    .error(R.drawable.default_apartment)
+                    .into(addImageBtn)
+            } else {
+                addImageBtn.setImageResource(R.drawable.default_apartment)
+            }
+            
             uploadApartmentBtn.setOnClickListener { onUpsertApartmentButtonClicked(it, apartment) } // Submit updates (edit)
         } else { // Add flow (empty UI)
             backButton.visibility = View.GONE // Hide back button in add mode
+            addImageBtn.setImageResource(R.drawable.default_apartment) // Show default apartment image initially
             uploadApartmentBtn.setOnClickListener(::onUpsertApartmentButtonClicked) // Submit new apartment (add)
         }
     }
@@ -225,14 +218,14 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
         val isValidDescription = RequiredValidation.validateRequiredTextField(descriptionTextField, "description") // Validate description
         val isValidRooms = RequiredValidation.validateRequiredTextField(roomsTextField, "rooms") // Validate rooms
         val isValidPrice = RequiredValidation.validateRequiredTextField(priceTextField, "price") // Validate price
-        val isValidPhoto = imageUri != null // Validate image is selected (or exists in edit)
 
-        if (isValidTitle && isValidDescription && isValidRooms && isValidPrice && isValidPhoto) { // Proceed only if all inputs are valid
+        if (isValidTitle && isValidDescription && isValidRooms && isValidPrice) { // Proceed only if all inputs are valid
+            progressBar.visibility = View.VISIBLE // Show loading spinner
+            layout.visibility = View.GONE // Hide form while uploading
             lifecycleScope.launch(Dispatchers.IO) { // Do IO work (network/storage/db) off main thread
                 try { // Guard all upsert work
                     val title = titleTextField.text.toString() // Read title input
                     val userId = AuthModel.instance.getUserId() ?: return@launch // Get current user id (non-null expected)\
-                    val imageUriSaver = imageUri ?: return@launch // Get current image URI (non-null expected)
                     val description = descriptionTextField.text.toString() // Read description input
                     val numOfRooms = roomsTextField.text.toString().toInt() // Parse rooms count
                     val price = priceTextField.text.toString().toInt() // Parse price
@@ -249,14 +242,38 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
                         apartment.startDate = startDate.timeInMillis // Update start date
                         apartment.endDate = endDate.timeInMillis // Update end date
 
-                        if (imageUri != Uri.parse(apartment.imageUrl)) { // Only re-upload if image was changed
-                            val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(imageUriSaver, FirebaseStorageModel.APARTMENTS_PATH) // Upload to Firebase Storage
-                            apartment.imageUrl = imageUrl // Save new image URL
+                        // Only re-upload if image was changed
+                        imageUri?.let { uri ->
+                            if (uri != Uri.parse(apartment.imageUrl)) {
+                                val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(uri, FirebaseStorageModel.APARTMENTS_PATH) // Upload to Firebase Storage
+                                apartment.imageUrl = imageUrl // Save new image URL
+                            }
                         }
 
                         ApartmentModel.instance.updateApartment(apartment) // Persist updated apartment
                     } else { // Add flow: create new apartment object
-                        val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(imageUriSaver, FirebaseStorageModel.APARTMENTS_PATH) // Upload selected image
+                        // Use selected image or default apartment drawable
+                        val uploadUri = imageUri ?: Uri.parse(
+                            "android.resource://${requireContext().packageName}/${R.drawable.default_apartment}"
+                        )
+                        val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(uploadUri, FirebaseStorageModel.APARTMENTS_PATH)
+                        Log.d(TAG, "Image uploaded, URL: $imageUrl")
+                        
+                        // Verify image URL is not empty before creating apartment
+                        if (imageUrl.isEmpty()) {
+                            throw Exception("Failed to upload image to Firebase Storage")
+                        }
+                        
+                        // Pre-load the uploaded image into Picasso's cache (blocking call on IO thread)
+                        try {
+                            // Use get() to synchronously download and cache the image
+                            Picasso.get().load(imageUrl).get()
+                            Log.d(TAG, "Image pre-loaded into Picasso cache")
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Failed to pre-load image into cache: ${e.message}")
+                            // Continue anyway - the image will load with a delay
+                        }
+                        
                         val newApartment = Apartment("", userId, title, price, description, location, Type.valueOf(type), numOfRooms, startDate.timeInMillis, endDate.timeInMillis, imageUrl) // Build new apartment model
                         ApartmentModel.instance.addApartment(newApartment) // Persist new apartment
                     }
@@ -281,6 +298,8 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
                 } catch (e: Exception) { // Catch any unexpected exception from parsing/upload/db
                     Log.e(TAG, "An unexpected error occurred: ${e.message}") // Log error message
                     lifecycleScope.launch(Dispatchers.Main) {
+                        progressBar.visibility = View.GONE // Hide loading spinner on error
+                        layout.visibility = View.VISIBLE // Show form again so user can retry
                         Toast.makeText(
                             requireContext(), // App context
                             if (apartment == null) "failed to upload sublet" else "failed to update sublet", // Failure message based on mode

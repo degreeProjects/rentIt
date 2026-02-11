@@ -39,17 +39,13 @@ class LikedApartmentsFragment : BaseApartmentsFragment() {
     /**
      * Sets up a LiveData observer on the apartments list.
      * When the data changes:
-     * 1. The progress bar is shown.
-     * 2. The adapter's data is updated with the current "Liked" list.
-     * 3. The UI is refreshed via [notifyDataSetChanged].
-     * 4. The progress bar is hidden.
+     * 1. The adapter's data is updated with the current "Liked" list.
+     * 2. The UI is refreshed via [notifyDataSetChanged].
      */
     override fun observeApartments() {
         viewModel.apartments?.observe(viewLifecycleOwner) {
-            progressBar.visibility = View.VISIBLE
             adapter.apartments = viewModel.getLikedApartments()
             adapter.notifyDataSetChanged()
-            progressBar.visibility = View.GONE
         }
     }
 

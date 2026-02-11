@@ -1,8 +1,6 @@
 package com.rentit.app.modules.apartments.adapter
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.View
 import android.widget.ImageButton
@@ -13,7 +11,6 @@ import com.rentit.app.R
 import com.rentit.app.models.apartment.Apartment
 import com.rentit.app.utils.DateUtils
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 
 class ApartmentsViewHolder(itemView: View, adapter: ApartmentsRecyclerAdapter): RecyclerView.ViewHolder(itemView) {
     private val TAG = "ApartmentsViewHolder"
@@ -89,19 +86,16 @@ class ApartmentsViewHolder(itemView: View, adapter: ApartmentsRecyclerAdapter): 
         propertyTypeTextView.text = apartment?.type.toString()
         datesTextView.text = "${DateUtils.formatDate(apartment?.startDate ?: 0)} - ${DateUtils.formatDate(apartment?.endDate ?: 0)}"
 
-        Picasso.get()
-            .load(apartment?.imageUrl)
-            .into(object : Target {
-                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                    image.setImageBitmap(bitmap)
-                }
-                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                    Log.e(TAG, e.toString())
-                }
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    Log.d(TAG, "onPrepareLoad")
-                }
-            })
+        // Load image with Picasso - no placeholder so image waits to display until fully loaded
+        if (!apartment?.imageUrl.isNullOrEmpty()) {
+            Picasso.get()
+                .load(apartment.imageUrl)
+                .error(R.drawable.default_apartment)
+                .into(image)
+        } else {
+            // Set default image when URL is empty
+            image.setImageResource(R.drawable.default_apartment)
+        }
 
         if (apartment?.isMine == true) {
             likeButton.visibility = View.GONE

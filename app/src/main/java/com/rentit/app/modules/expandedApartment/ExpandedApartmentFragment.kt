@@ -1,10 +1,7 @@
 package com.rentit.app.modules.expandedApartment
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,12 +20,9 @@ import com.rentit.app.models.apartment.Apartment
 import com.rentit.app.models.user.UserModel
 import com.rentit.app.utils.DateUtils
 import com.squareup.picasso.Picasso
-import com.squareup.picasso.Target
 import kotlinx.coroutines.launch
 
 class ExpandedApartmentFragment : Fragment() {
-    private var TAG = "ExpandedApartmentFragment"
-
     private lateinit var binding: FragmentExpandedApartmentBinding
     private lateinit var viewModel: ExpandedApartmentViewModel
     private lateinit var progressBar: ProgressBar
@@ -106,21 +100,15 @@ class ExpandedApartmentFragment : Fragment() {
             phoneTextView.text = u.phoneNumber
         }
 
-        Picasso.get()
-            .load(apartment.imageUrl)
-            .into(object : Target {
-                override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                    image.setImageBitmap(bitmap)
-                }
-
-                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                    Log.e(TAG, e.toString())
-                }
-
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                    Log.d(TAG, "onPrepareLoad")
-                }
-            })
+        // Load image with Picasso - no placeholder so image waits to display until fully loaded
+        if (!apartment.imageUrl.isNullOrEmpty()) {
+            Picasso.get()
+                .load(apartment.imageUrl)
+                .error(R.drawable.default_apartment)
+                .into(image)
+        } else {
+            image.setImageResource(R.drawable.default_apartment)
+        }
 
         progressBar.visibility = View.GONE
         layout.visibility = View.VISIBLE

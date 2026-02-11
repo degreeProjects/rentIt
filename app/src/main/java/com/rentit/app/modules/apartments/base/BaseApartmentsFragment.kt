@@ -37,6 +37,10 @@ abstract class BaseApartmentsFragment : Fragment() {
         viewModel = ViewModelProvider(this)[ApartmentsViewModel::class.java]
 
         progressBar = binding.progressBar
+        
+        // Show loading spinner initially
+        progressBar.visibility = View.VISIBLE
+        binding.pullToRefresh.visibility = View.GONE
 
         // Set up RecyclerView immediately to avoid "No adapter attached" warning
         recyclerView = binding.rvApartmentsFragmentList
@@ -59,7 +63,18 @@ abstract class BaseApartmentsFragment : Fragment() {
             reloadData()
         }
 
+        // Observe loading state to show/hide spinner
         ApartmentModel.instance.apartmentsListLoadingState.observe(viewLifecycleOwner) { state ->
+            when (state) {
+                ApartmentModel.LoadingState.LOADING -> {
+                    progressBar.visibility = View.VISIBLE
+                    binding.pullToRefresh.visibility = View.GONE
+                }
+                ApartmentModel.LoadingState.LOADED, ApartmentModel.LoadingState.ERROR -> {
+                    progressBar.visibility = View.GONE
+                    binding.pullToRefresh.visibility = View.VISIBLE
+                }
+            }
             binding.pullToRefresh.isRefreshing = state == ApartmentModel.LoadingState.LOADING
         }
 
@@ -67,10 +82,8 @@ abstract class BaseApartmentsFragment : Fragment() {
     }
 
     private fun reloadData() {
-        progressBar.visibility = View.VISIBLE
         lifecycleScope.launch {
             viewModel.refreshAllApartments()
         }
-        progressBar.visibility = View.GONE
     }
 }
