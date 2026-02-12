@@ -65,6 +65,25 @@ class UserModel private constructor() {
         Log.d(TAG, "get me")
         val userId = AuthModel.instance.getUserId() ?: return
         currentUser = getUserById(userId)
+        
+        // Preload avatar image for better profile page performance
+        preloadUserAvatar()
+    }
+    
+    private fun preloadUserAvatar() {
+        val avatarUrl = currentUser?.avatarUrl
+        if (!avatarUrl.isNullOrEmpty()) {
+            try {
+                // Prefetch the avatar image so it's cached when user visits profile
+                com.squareup.picasso.Picasso.get()
+                    .load(avatarUrl)
+                    .fetch()
+                Log.d(TAG, "Preloading avatar image for better profile performance")
+            } catch (e: Exception) {
+                // Silently fail - not critical if preload doesn't work
+                Log.d(TAG, "Avatar preload skipped: ${e.message}")
+            }
+        }
     }
 
     suspend fun getUserById(userId: String): User? {

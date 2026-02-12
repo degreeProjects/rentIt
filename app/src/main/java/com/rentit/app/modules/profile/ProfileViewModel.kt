@@ -14,6 +14,7 @@ class ProfileViewModel: ViewModel() {
     var user: MutableLiveData<User> = MutableLiveData<User>()
 
     fun getCurrentUser() {
+        // Use cached data - already fresh from app startup
         user.value = UserModel.instance.currentUser
     }
 

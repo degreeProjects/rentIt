@@ -46,6 +46,7 @@ class ProfileFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var layout: View
     private var avatarUri: Uri? = null
+    private var avatarTarget: Target? = null
 
     private val addImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -71,7 +72,9 @@ class ProfileFragment : Fragment() {
         viewModel.getCurrentUser()
 
         viewModel.user.observe(viewLifecycleOwner) { user ->
-            progressBar.visibility = View.VISIBLE
+            // Show UI immediately - don't wait for avatar to load
+            progressBar.visibility = View.GONE
+            layout.visibility = View.VISIBLE
 
             nameTextField.setText(user.name)
             phoneNumberTextField.setText(user.phoneNumber)
@@ -79,34 +82,41 @@ class ProfileFragment : Fragment() {
             // Clear avatar URI after successful update
             avatarUri = null
 
-            // Load image into ImageView using Picasso
+            // Load avatar image - will be instant from cache due to preloading
             if (!user.avatarUrl.isNullOrEmpty()) {
+                // Hide avatar while loading to avoid showing placeholder
+                avatarImageButton.alpha = 0f
+                
+                // Create Target to control visibility
+                val target = object : Target {
+                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                        Log.d(TAG, "Avatar loaded from: $from")
+                        avatarImageButton.setImageBitmap(bitmap)
+                        // Fade in smoothly
+                        avatarImageButton.animate().alpha(1f).setDuration(150).start()
+                    }
+
+                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                        Log.e(TAG, "Failed to load avatar: ${e?.message}")
+                        avatarImageButton.setImageResource(R.drawable.account_circle)
+                        avatarImageButton.animate().alpha(1f).setDuration(150).start()
+                    }
+
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                        // Keep hidden while loading
+                        Log.d(TAG, "Preparing to load avatar")
+                    }
+                }
+                avatarTarget = target
+                
                 Picasso.get()
                     .load(user.avatarUrl)
-                    .placeholder(R.drawable.account_circle)
-                    .into(object : Target {
-                        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                            progressBar.visibility = View.GONE
-                            layout.visibility = View.VISIBLE
-                            avatarImageButton.setImageBitmap(bitmap)
-                        }
-
-                        override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                            Log.e(TAG, "error")
-                            progressBar.visibility = View.GONE
-                            layout.visibility = View.VISIBLE
-                            avatarImageButton.setImageResource(R.drawable.account_circle)
-                        }
-
-                        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                            Log.d(TAG, "onPrepareLoad")
-                        }
-                    })
+                    .error(R.drawable.account_circle)
+                    .into(target)
             } else {
                 // If avatarUrl is null or empty, just show the placeholder
-                progressBar.visibility = View.GONE
-                layout.visibility = View.VISIBLE
                 avatarImageButton.setImageResource(R.drawable.account_circle)
+                avatarImageButton.alpha = 1f
             }
         }
 
@@ -173,6 +183,8 @@ class ProfileFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
 
+        // Clear the target to prevent memory leaks
+        avatarTarget = null
         _binding = null
     }
 }
