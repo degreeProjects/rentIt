@@ -57,7 +57,7 @@ class UserModel private constructor() {
     suspend fun updateMe(updateUserInput: UpdateUserInput) {
         val userId = AuthModel.instance.getUserId() ?: return
         Log.d(TAG, "update user with data: $updateUserInput")
-        firebaseDB.collection(USERS_COLLECTION_PATH).document(userId).update(updateUserInput.toJson)
+        firebaseDB.collection(USERS_COLLECTION_PATH).document(userId).update(updateUserInput.toJson).await()
         getMe()
     }
 

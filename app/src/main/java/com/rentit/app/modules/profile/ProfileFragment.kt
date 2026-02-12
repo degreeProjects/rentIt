@@ -75,6 +75,9 @@ class ProfileFragment : Fragment() {
 
             nameTextField.setText(user.name)
             phoneNumberTextField.setText(user.phoneNumber)
+                        
+            // Clear avatar URI after successful update
+            avatarUri = null
 
             // Load image into ImageView using Picasso
             if (!user.avatarUrl.isNullOrEmpty()) {
@@ -134,6 +137,9 @@ class ProfileFragment : Fragment() {
             val name = nameTextField.text.toString()
             val phoneNumber = phoneNumberTextField.text.toString()
 
+            // Show loading spinner
+            progressBar.visibility = View.VISIBLE
+            layout.visibility = View.GONE
 
             val updateUserInput = UpdateUserInput(name, phoneNumber, avatarUrl)
             viewModel.updateCurrentUser(updateUserInput, avatarUri)
