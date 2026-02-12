@@ -77,24 +77,34 @@ class ProfileFragment : Fragment() {
             phoneNumberTextField.setText(user.phoneNumber)
 
             // Load image into ImageView using Picasso
-            Picasso.get()
-                .load(user.avatarUrl)
-                .placeholder(R.drawable.account_circle)
-                .into(object : Target {
-                    override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
-                        progressBar.visibility = View.GONE
-                        layout.visibility = View.VISIBLE
-                        avatarImageButton.setImageBitmap(bitmap)
-                    }
+            if (!user.avatarUrl.isNullOrEmpty()) {
+                Picasso.get()
+                    .load(user.avatarUrl)
+                    .placeholder(R.drawable.account_circle)
+                    .into(object : Target {
+                        override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
+                            progressBar.visibility = View.GONE
+                            layout.visibility = View.VISIBLE
+                            avatarImageButton.setImageBitmap(bitmap)
+                        }
 
-                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
-                        Log.e(TAG, "error")
-                    }
+                        override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
+                            Log.e(TAG, "error")
+                            progressBar.visibility = View.GONE
+                            layout.visibility = View.VISIBLE
+                            avatarImageButton.setImageResource(R.drawable.account_circle)
+                        }
 
-                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                        Log.d(TAG, "onPrepareLoad")
-                    }
-                })
+                        override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
+                            Log.d(TAG, "onPrepareLoad")
+                        }
+                    })
+            } else {
+                // If avatarUrl is null or empty, just show the placeholder
+                progressBar.visibility = View.GONE
+                layout.visibility = View.VISIBLE
+                avatarImageButton.setImageResource(R.drawable.account_circle)
+            }
         }
 
         return binding.root
