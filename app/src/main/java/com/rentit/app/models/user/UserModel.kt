@@ -65,6 +65,25 @@ class UserModel private constructor() {
         Log.d(TAG, "get me")
         val userId = AuthModel.instance.getUserId() ?: return
         currentUser = getUserById(userId)
+        
+        // Preload avatar image for better profile page performance
+        preloadUserAvatar()
+    }
+    
+    private fun preloadUserAvatar() {
+        val avatarUrl = currentUser?.avatarUrl
+        if (!avatarUrl.isNullOrEmpty()) {
+            try {
+                // Prefetch the avatar image so it's cached when user visits profile
+                com.squareup.picasso.Picasso.get()
+                    .load(avatarUrl)
+                    .fetch()
+                Log.d(TAG, "Preloading avatar image for better profile performance")
+            } catch (e: Exception) {
+                // Silently fail - not critical if preload doesn't work
+                Log.d(TAG, "Avatar preload skipped: ${e.message}")
+            }
+        }
     }
 
     suspend fun getUserById(userId: String): User? {
@@ -107,6 +126,34 @@ class UserModel private constructor() {
                 .addOnFailureListener { exception ->
                     continuation.resumeWithException(exception)
                 }
+        }
+    }
+
+    suspend fun removeApartmentFromAllUsers(apartmentId: String) {
+        try {
+            Log.d(TAG, "Removing apartment $apartmentId from all users' liked apartments")
+            // Get all users who have this apartment in their liked apartments
+            val usersSnapshot = firebaseDB.collection(USERS_COLLECTION_PATH)
+                .whereArrayContains(User.LIKED_APARTMENTS_KEY, apartmentId)
+                .get()
+                .await()
+
+            // Remove the apartment from each user's liked apartments array
+            for (document in usersSnapshot.documents) {
+                firebaseDB.collection(USERS_COLLECTION_PATH)
+                    .document(document.id)
+                    .update(User.LIKED_APARTMENTS_KEY, FieldValue.arrayRemove(apartmentId))
+                    .await()
+                
+                // Update currentUser if they were one of the users
+                if (document.id == currentUser?.id) {
+                    currentUser?.likedApartments?.remove(apartmentId)
+                }
+            }
+            Log.d(TAG, "Successfully removed apartment from ${usersSnapshot.size()} users")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error removing apartment from users: ${e.message}")
+            throw e
         }
     }
 }
