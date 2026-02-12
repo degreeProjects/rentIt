@@ -44,6 +44,8 @@ class RegisterFragment : Fragment() {
     private lateinit var addImageBtn: Button
     private lateinit var registerButton: Button
     private lateinit var signInButton: Button
+    private lateinit var progressBar: android.widget.ProgressBar
+    private lateinit var layout: View
     private var avatarUri: Uri? = null
 
     private val addImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -68,6 +70,8 @@ class RegisterFragment : Fragment() {
 
     private fun setupUi() {
         val binding = _binding ?: return
+        layout = binding.clRegisterFragment
+        progressBar = binding.progressBarRegisterFragment
         userImageView = binding.ivRegisterFragmentUserAvatar
         nameTextField = binding.etRegisterFragmentName
         emailTextField = binding.etRegisterFragmentEmail
@@ -96,6 +100,10 @@ class RegisterFragment : Fragment() {
         val isValidPhoto = avatarUri != null
 
         if (isValidName && isValidEmail && isValidPassword && isValidPhoneNumber && isValidPhoto) {
+            // Show loading spinner
+            progressBar.visibility = View.VISIBLE
+            layout.visibility = View.GONE
+
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
                     val authResult = AuthModel.instance.signUp(emailTextField.text.toString(), passwordTextField.text.toString())
@@ -105,11 +113,15 @@ class RegisterFragment : Fragment() {
                     val user = User(userId, nameTextField.text.toString(),phoneNumberTextField.text.toString(), emailTextField.text.toString(), avatarUrl)
                     UserModel.instance.addUser(user)
                     withContext(Dispatchers.Main) {
+                        progressBar.visibility = View.GONE
+                        layout.visibility = View.VISIBLE
                         view.findNavController().popBackStack(R.id.loginFragment, false)
                     }
                 } catch (e: Exception) {
                     Log.e(TAG, "An unexpected error occurred: ${e.message}")
                     withContext(Dispatchers.Main) {
+                        progressBar.visibility = View.GONE
+                        layout.visibility = View.VISIBLE
                         Toast.makeText(
                             requireContext(),
                             e.message,
