@@ -26,6 +26,9 @@ class ApartmentsViewModel: ViewModel() {
 
     fun onDeleteClick(apartmentId: String) {
         viewModelScope.launch {
+            // First remove the apartment from all users who have liked it
+            UserModel.instance.removeApartmentFromAllUsers(apartmentId)
+            // Then delete the apartment
             ApartmentModel.instance.deleteApartment(apartmentId)
         }
     }

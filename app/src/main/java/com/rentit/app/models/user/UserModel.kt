@@ -109,4 +109,32 @@ class UserModel private constructor() {
                 }
         }
     }
+
+    suspend fun removeApartmentFromAllUsers(apartmentId: String) {
+        try {
+            Log.d(TAG, "Removing apartment $apartmentId from all users' liked apartments")
+            // Get all users who have this apartment in their liked apartments
+            val usersSnapshot = firebaseDB.collection(USERS_COLLECTION_PATH)
+                .whereArrayContains(User.LIKED_APARTMENTS_KEY, apartmentId)
+                .get()
+                .await()
+
+            // Remove the apartment from each user's liked apartments array
+            for (document in usersSnapshot.documents) {
+                firebaseDB.collection(USERS_COLLECTION_PATH)
+                    .document(document.id)
+                    .update(User.LIKED_APARTMENTS_KEY, FieldValue.arrayRemove(apartmentId))
+                    .await()
+                
+                // Update currentUser if they were one of the users
+                if (document.id == currentUser?.id) {
+                    currentUser?.likedApartments?.remove(apartmentId)
+                }
+            }
+            Log.d(TAG, "Successfully removed apartment from ${usersSnapshot.size()} users")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error removing apartment from users: ${e.message}")
+            throw e
+        }
+    }
 }
