@@ -24,7 +24,7 @@
         android:layout_height="match_parent"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:layout_editor_absoluteX="0dp">
+        tools:layout_editor_absoluteX="-43dp">
 
         <ImageButton
             android:id="@+id/ibExpandedFragmentBack"
@@ -109,7 +109,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
+            android:gravity="start"
             android:text="location"
+            android:textAlignment="viewStart"
             android:textColor="#000000"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -121,7 +123,7 @@
             android:id="@+id/tvExpandedApartmentPrice"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="68dp"
             android:text="price"
             android:textColor="#000000"
             android:textSize="16sp"
@@ -176,11 +178,24 @@
             app:layout_constraintTop_toBottomOf="@+id/tvExpandedApartmentRooms" />
 
         <TextView
+            android:id="@+id/tvDescriptionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:text="Description:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvExpandedApartmentType" />
+
+        <TextView
             android:id="@+id/tvExpandedApartmentDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="0dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:inputType="textMultiLine"
@@ -195,26 +210,39 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvExpandedApartmentType" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDescriptionLabel" />
+
+        <TextView
+            android:id="@+id/tvSellerInfoLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:text="Seller Information:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvExpandedApartmentDescription" />
 
         <ImageView
             android:id="@+id/ivExpandedApartmentPersonIcon"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:src="@drawable/person_icon"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvExpandedApartmentDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/tvSellerInfoLabel" />
 
         <TextView
             android:id="@+id/tvExpandedApartmentPerson"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="64dp"
             android:text="person"
             android:textColor="@color/black"
             android:textSize="16sp"

@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Upload Your Sublet"
+            android:text="Upload Your Apartment"
             android:textColor="@color/black"
             android:textSize="24sp"
             android:textStyle="bold"
@@ -204,10 +204,10 @@
 
         <Button
             android:id="@+id/btnUpsertApartmentUpload"
-            android:layout_width="163dp"
-            android:layout_height="55dp"
+            android:layout_width="120dp"
+            android:layout_height="53dp"
             android:layout_marginBottom="28dp"
-            android:text="Upload Sublet"
+            android:text="Upload"
             android:textColor="#FFFFFF"
             android:textSize="15sp"
             android:textStyle="bold"

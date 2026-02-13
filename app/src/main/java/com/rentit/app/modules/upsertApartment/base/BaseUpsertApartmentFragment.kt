@@ -43,8 +43,8 @@ import androidx.navigation.findNavController
 
 // Shared fragment for both "Add" and "Edit" apartment flows
 abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TAG is used for log messages
-    private var startDate: Calendar = Calendar.getInstance() // Start date state for the sublet
-    private var endDate: Calendar = Calendar.getInstance() // End date state for the sublet
+    private var startDate: Calendar = Calendar.getInstance() // Start date state for the apartment
+    private var endDate: Calendar = Calendar.getInstance() // End date state for the apartment
     private var imageUri: Uri? = null // Holds the selected image URI (or parsed URL for edit)
     private val types = arrayOf("Apartment", "House", "Villa", "Penthouse") // Available apartment type options
 
@@ -140,9 +140,9 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
         backButton.setOnClickListener(::onBackButtonClicked) // Wire click to navigate back
 
         if (apartment != null) { // Edit flow (populate UI)
-            Log.d(TAG, "apartment: $apartment") // Log apartment object for debugging
-            textTextView.text = "Edit Your Sublet" // Set header text for edit mode
-            uploadApartmentBtn.text = "Edit Sublet" // Set button text for edit mode
+            Log.d(TAG, "apartment: $apartment")
+            textTextView.text = "Edit Your Apartment" // Set header text for edit mode
+            uploadApartmentBtn.text = "Edit" // Set button text for edit mode
             titleTextField.setText(apartment.title) // Fill title
             descriptionTextField.setText(apartment.description) // Fill description
             roomsTextField.setText(apartment.numOfRooms.toString()) // Fill rooms
@@ -282,14 +282,14 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
                         if (apartment == null) { // Add success path
                             Toast.makeText(
                                 requireContext(), // App context
-                                "sublet uploaded successfully", // Success message
+                                "apartment uploaded successfully", // Success message
                                 Toast.LENGTH_SHORT, // Duration
                             ).show() // Show toast
                             Navigation.findNavController(view).popBackStack(R.id.apartmentsFragment, false) // Navigate back to apartments list
                         } else { // Edit success path
                             Toast.makeText(
                                 requireContext(), // App context
-                                "sublet updated successfully", // Success message
+                                "apartment updated successfully", // Success message
                                 Toast.LENGTH_SHORT, // Duration
                             ).show() // Show toast
                             Navigation.findNavController(view).popBackStack() // Go back one screen
@@ -302,7 +302,7 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
                         layout.visibility = View.VISIBLE // Show form again so user can retry
                         Toast.makeText(
                             requireContext(), // App context
-                            if (apartment == null) "failed to upload sublet" else "failed to update sublet", // Failure message based on mode
+                            if (apartment == null) "failed to upload apartment" else "failed to update apartment", // Failure message based on mode
                             Toast.LENGTH_SHORT, // Duration
                         ).show() // Show toast
                     }
@@ -312,7 +312,7 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() { // TA
             Log.e(TAG, "some of the apartment details are missing") // Log missing fields
             Toast.makeText(
                 requireContext(), // App context
-                "missing some sublet details", // User-facing message
+                "missing some apartment details", // User-facing message
                 Toast.LENGTH_SHORT, // Duration
             ).show() // Show toast
         }
