@@ -178,11 +178,24 @@
             app:layout_constraintTop_toBottomOf="@+id/tvExpandedApartmentRooms" />
 
         <TextView
+            android:id="@+id/tvDescriptionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="24dp"
+            android:text="Description:"
+            android:textColor="#000000"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvExpandedApartmentType" />
+
+        <TextView
             android:id="@+id/tvExpandedApartmentDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="0dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:inputType="textMultiLine"
@@ -197,9 +210,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvExpandedApartmentType" />
+            app:layout_constraintTop_toBottomOf="@+id/tvDescriptionLabel" />
 
         <TextView
             android:id="@+id/tvSellerInfoLabel"
