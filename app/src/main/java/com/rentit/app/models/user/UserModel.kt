@@ -13,6 +13,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+// Singleton class managing user data and operations with Firestore.
 class UserModel private constructor() {
     private val firebaseDB = FireStoreModel.instance.db
     var currentUser: User? = null
@@ -23,6 +24,7 @@ class UserModel private constructor() {
         val instance: UserModel = UserModel()
     }
 
+    // Adds a new user to Firestore database.
     suspend fun addUser(user: User) {
         Log.d(TAG, "add user: $user")
         firebaseDB.collection(USERS_COLLECTION_PATH)
@@ -30,6 +32,7 @@ class UserModel private constructor() {
             .set(user.toJson).await()
     }
 
+    // Updates the current user's profile data in Firestore and refreshes local cache.
     suspend fun updateMe(updateUserInput: UpdateUserInput) {
         val userId = AuthModel.instance.getUserId() ?: return
         Log.d(TAG, "update user with data: $updateUserInput")
@@ -37,6 +40,7 @@ class UserModel private constructor() {
         getMe()
     }
 
+    // Fetches the current authenticated user's data and updates local cache.
     suspend fun getMe() {
         Log.d(TAG, "get me")
         val userId = AuthModel.instance.getUserId() ?: return
@@ -46,6 +50,7 @@ class UserModel private constructor() {
         preloadUserAvatar()
     }
     
+    // Prefetches the user's avatar image for improved profile page loading.
     private fun preloadUserAvatar() {
         val avatarUrl = currentUser?.avatarUrl
         if (!avatarUrl.isNullOrEmpty()) {
@@ -61,6 +66,8 @@ class UserModel private constructor() {
         }
     }
 
+    // Retrieves a user by their ID from Firestore.
+    // Returns null if user not found or error occurs.
     suspend fun getUserById(userId: String): User? {
         Log.d(TAG, "getUserById with id $userId")
         return try {
@@ -81,12 +88,11 @@ class UserModel private constructor() {
                 .document(userId)
                 .update(User.LIKED_APARTMENTS_KEY, FieldValue.arrayUnion(apartmentId))
                 .addOnSuccessListener {
-                    // Update local cache for immediate UI reflection
-                    currentUser?.likedApartments?.add(apartmentId)
-                    continuation.resume(Unit)
+                    currentUser?.likedApartments?.add(apartmentId) // Update local cache for immediate UI reflection
+                    continuation.resume(Unit) // Resume coroutine with success doesnt return anything
                 }
                 .addOnFailureListener { exception ->
-                    continuation.resumeWithException(exception)
+                    continuation.resumeWithException(exception) // Resume coroutine with error
                 }
         }
     }
@@ -100,12 +106,11 @@ class UserModel private constructor() {
                 .document(userId)
                 .update(User.LIKED_APARTMENTS_KEY, FieldValue.arrayRemove(apartmentId))
                 .addOnSuccessListener {
-                    // Update local cache for immediate UI reflection
-                    currentUser?.likedApartments?.remove(apartmentId)
-                    continuation.resume(Unit)
+                    currentUser?.likedApartments?.remove(apartmentId) // Update local cache for immediate UI reflection
+                    continuation.resume(Unit) // Resume coroutine with success doesnt return anything
                 }
                 .addOnFailureListener { exception ->
-                    continuation.resumeWithException(exception)
+                    continuation.resumeWithException(exception) // Resume coroutine with error
                 }
         }
     }

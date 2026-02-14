@@ -2,6 +2,8 @@ package com.rentit.app.models.user
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+
+// Room entity representing a user profile with their liked apartments.
 @Entity
 data class User(
     @PrimaryKey val id: String,
@@ -20,6 +22,8 @@ data class User(
         private const val AVATAR_URL_KEY = "avatarUrl"
         const val LIKED_APARTMENTS_KEY = "likedApartments"
 
+        // Converts JSON map from Firestore into User object.
+        // Handles missing or null values with defaults.
         fun fromJson(json: Map<String, Any?>): User {
             val id = json[ID_KEY] as? String ?: ""
             val name = json[NAME_KEY] as? String ?: ""
@@ -32,6 +36,7 @@ data class User(
         }
     }
 
+    // Converts User object to JSON map for Firestore storage.
     val toJson: Map<String, Any>
         get() = hashMapOf(
             ID_KEY to id,
