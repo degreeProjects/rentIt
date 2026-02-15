@@ -17,7 +17,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.rentit.app.R
-import com.rentit.app.base.MyApplication
 import com.rentit.app.models.FirebaseStorageModel
 import com.rentit.app.utils.RequiredValidation
 import com.rentit.app.databinding.FragmentRegisterBinding
@@ -29,6 +28,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import androidx.navigation.findNavController
 
+/**
+ * RegisterFragment
+ *
+ * Handles new user registration with Firebase authentication.
+ * Collects user details including name, email, password, phone number, and avatar.
+ */
 class RegisterFragment : Fragment() {
     companion object {
         const val TAG = "RegisterFragment"
@@ -48,6 +53,7 @@ class RegisterFragment : Fragment() {
     private lateinit var layout: View
     private var avatarUri: Uri? = null
 
+    // handles avatar image selection from device gallery
     private val addImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val selectedImageUri = result.data?.data
@@ -61,13 +67,14 @@ class RegisterFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val binding = FragmentRegisterBinding.inflate(inflater, container, false)
+        val binding = FragmentRegisterBinding.inflate(inflater, container, false) // connects Kotlin code to the XML layout
         _binding = binding
         setupUi()
 
         return binding.root
     }
 
+    // initializes UI components and sets up event listeners
     private fun setupUi() {
         val binding = _binding ?: return
         layout = binding.clRegisterFragment
@@ -86,12 +93,14 @@ class RegisterFragment : Fragment() {
         signInButton.setOnClickListener(::onSignInButtonClicked)
     }
 
+    // opens device gallery to select an avatar image
     private fun onAddImageButtonClicked() {
         val imagePickerIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
         addImageLauncher.launch(imagePickerIntent)
     }
 
+    // validates all input fields and creates new user account with firebase authentication
     private fun onRegisterButtonClicked(view: View) {
         val isValidName = RequiredValidation.validateRequiredTextField(nameTextField, "name")
         val isValidEmail = RequiredValidation.validateRequiredTextField(emailTextField, "email")
@@ -106,14 +115,17 @@ class RegisterFragment : Fragment() {
 
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
+                    // create firebase authentication account
                     val authResult = AuthModel.instance.signUp(emailTextField.text.toString(), passwordTextField.text.toString())
                     val userId = authResult.user?.uid ?: return@launch
                     val currentAvatarUri = avatarUri ?: return@launch
+                    // upload avatar to firebase storage
                     val avatarUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(currentAvatarUri, FirebaseStorageModel.USERS_PATH)
+                    // create user document in firestore
                     val user = User(userId, nameTextField.text.toString(),phoneNumberTextField.text.toString(), emailTextField.text.toString(), avatarUrl)
                     UserModel.instance.addUser(user)
                     withContext(Dispatchers.Main) {
-                        progressBar.visibility = View.GONE
+                        progressBar.visibility = View.GONE // Hide loading spinner
                         layout.visibility = View.VISIBLE
                         view.findNavController().popBackStack(R.id.loginFragment, false)
                     }
@@ -140,6 +152,7 @@ class RegisterFragment : Fragment() {
         }
     }
 
+    // navigates back to login screen
     private fun onSignInButtonClicked(view: View) {
         view.findNavController().popBackStack()
     }

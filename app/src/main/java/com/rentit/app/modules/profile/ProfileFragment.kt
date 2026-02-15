@@ -21,7 +21,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.rentit.app.MainActivity
 import com.rentit.app.R
-import com.rentit.app.base.MyApplication
 import com.rentit.app.utils.RequiredValidation
 import com.rentit.app.databinding.FragmentProfileBinding
 import com.rentit.app.models.auth.AuthModel
@@ -30,6 +29,12 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 
+/**
+ * ProfileFragment
+ *
+ * Manages user profile display and editing functionality.
+ * Allows users to update their name, phone number, and avatar image.
+ */
 class ProfileFragment : Fragment() {
     companion object {
         private const val TAG = "ProfileFragment"
@@ -48,6 +53,7 @@ class ProfileFragment : Fragment() {
     private var avatarUri: Uri? = null
     private var avatarTarget: Target? = null
 
+    // handles image selection from device gallery
     private val addImageLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             val selectedImageUri = result.data?.data
@@ -62,15 +68,16 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentProfileBinding.inflate(inflater, container, false)
+        val binding = FragmentProfileBinding.inflate(inflater, container, false) // connects Kotlin code to the XML layout
         _binding = binding
 
         setupUi()
 
-        viewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
+        viewModel = ViewModelProvider(this)[ProfileViewModel::class.java] // connects the Fragment to its data source
 
-        viewModel.getCurrentUser()
+        viewModel.getCurrentUser() // loads current user data from cache
 
+        // observes user data changes and updates UI
         viewModel.user.observe(viewLifecycleOwner) { user ->
             // Show UI immediately - don't wait for avatar to load
             progressBar.visibility = View.GONE
@@ -91,20 +98,18 @@ class ProfileFragment : Fragment() {
                 val target = object : Target {
                     override fun onBitmapLoaded(bitmap: Bitmap?, from: Picasso.LoadedFrom?) {
                         Log.d(TAG, "Avatar loaded from: $from")
-                        avatarImageButton.setImageBitmap(bitmap)
-                        // Fade in smoothly
-                        avatarImageButton.animate().alpha(1f).setDuration(150).start()
+                        avatarImageButton.setImageBitmap(bitmap) // set loaded image
+                        avatarImageButton.animate().alpha(1f).setDuration(150).start()  // Fade in smoothly
                     }
 
                     override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {
                         Log.e(TAG, "Failed to load avatar: ${e?.message}")
-                        avatarImageButton.setImageResource(R.drawable.account_circle)
-                        avatarImageButton.animate().alpha(1f).setDuration(150).start()
+                        avatarImageButton.setImageResource(R.drawable.account_circle) // set default image on failure
+                        avatarImageButton.animate().alpha(1f).setDuration(150).start()  // Fade in smoothly
                     }
 
                     override fun onPrepareLoad(placeHolderDrawable: Drawable?) {
-                        // Keep hidden while loading
-                        Log.d(TAG, "Preparing to load avatar")
+                        Log.d(TAG, "Preparing to load avatar") // Keep hidden while loading
                     }
                 }
                 avatarTarget = target
@@ -123,6 +128,7 @@ class ProfileFragment : Fragment() {
         return binding.root
     }
 
+    // initializes UI components and sets up event listeners
     private fun setupUi() {
         val binding = _binding ?: return
         layout = binding.clProfileFragment
@@ -138,6 +144,7 @@ class ProfileFragment : Fragment() {
         logoutButton.setOnClickListener(::onLogoutButtonClicked)
     }
 
+    // validates input fields and updates user profile with new data and avatar
     private fun onEditButtonClicked(view: View) {
         val isValidName = RequiredValidation.validateRequiredTextField(nameTextField, "name")
         val isValidEmail = RequiredValidation.validateRequiredTextField(phoneNumberTextField, "phone number")
@@ -168,12 +175,14 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    // opens device gallery to select a new avatar image
     private fun onImageViewButton(view: View) {
         val imagePickerIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
         addImageLauncher.launch(imagePickerIntent)
     }
 
+    // signs out user and navigates back to login screen
     private fun onLogoutButtonClicked(view: View) {
         AuthModel.instance.signOut()
         val intent = Intent(activity, MainActivity::class.java)
@@ -183,8 +192,7 @@ class ProfileFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
 
-        // Clear the target to prevent memory leaks
-        avatarTarget = null
+        avatarTarget = null // Clear the target to prevent memory leaks
         _binding = null
     }
 }

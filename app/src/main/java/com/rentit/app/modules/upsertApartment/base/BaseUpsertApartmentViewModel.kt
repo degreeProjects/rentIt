@@ -1,15 +1,22 @@
 package com.rentit.app.modules.upsertApartment.base
 
-import androidx.lifecycle.LiveData // LiveData type for observing apartment changes
-import androidx.lifecycle.ViewModel // Base ViewModel class
-import com.rentit.app.models.apartment.Apartment // Apartment model
-import com.rentit.app.models.apartment.ApartmentModel // Model/repository for apartment operations
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import com.rentit.app.models.apartment.Apartment
+import com.rentit.app.models.apartment.ApartmentModel
 
-// ViewModel that loads a single apartment for the edit flow
-class BaseUpsertApartmentViewModel: ViewModel() { // Simple ViewModel (no SavedStateHandle here)
-    var apartment: LiveData<Apartment>? = null // Holds the observable apartment (null until set)
+/**
+ * BaseUpsertApartmentViewModel
+ *
+ * ViewModel that loads a single apartment for the edit flow.
+ * Provides LiveData for observing apartment data changes.
+ */
+class BaseUpsertApartmentViewModel: ViewModel() {
+    // LiveData containing the apartment being edited
+    var apartment: LiveData<Apartment>? = null
 
-    fun setApartment(apartmentId: String) { // Set the current apartment by id
-        apartment = ApartmentModel.instance.getApartment(apartmentId) // Fetch apartment LiveData from the model/repository
+    // loads apartment data from the model by apartment ID
+    fun setApartment(apartmentId: String) {
+        apartment = ApartmentModel.instance.getApartment(apartmentId)
     }
 }
