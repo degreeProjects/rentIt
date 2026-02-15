@@ -12,9 +12,19 @@ import com.rentit.app.models.apartment.Apartment
 import com.rentit.app.utils.DateUtils
 import com.squareup.picasso.Picasso
 
+/**
+ * ApartmentsViewHolder
+ *
+ * ViewHolder for apartment list items in the RecyclerView.
+ * Manages the UI elements of a single apartment card and handles user interactions.
+ * 
+ * @param itemView The view for a single apartment item
+ * @param adapter Reference to the parent adapter for handling interactions
+ */
 class ApartmentsViewHolder(itemView: View, adapter: ApartmentsRecyclerAdapter): RecyclerView.ViewHolder(itemView) {
     private val TAG = "ApartmentsViewHolder"
 
+    // UI components for displaying apartment information
     private var titleTextView: TextView
     private var priceTextView: TextView
     private var locationTextView: TextView
@@ -22,12 +32,16 @@ class ApartmentsViewHolder(itemView: View, adapter: ApartmentsRecyclerAdapter): 
     private var propertyTypeTextView: TextView
     private var datesTextView: TextView
 
+    // UI components for apartment actions and image
     private var actionsLayout: View
     private var image: ImageView
     private var likeButton: ImageButton
     private var editButton: ImageButton
     private var deleteButton: ImageButton
 
+    /**
+     * Initializes view components and sets up click listeners.
+     */
     init {
         titleTextView = itemView.findViewById(R.id.tvApartmentsListTitle)
         priceTextView = itemView.findViewById(R.id.tvApartmentsListPrice)
@@ -41,6 +55,7 @@ class ApartmentsViewHolder(itemView: View, adapter: ApartmentsRecyclerAdapter): 
         editButton = itemView.findViewById(R.id.ibApartmentsListEditButton)
         deleteButton = itemView.findViewById(R.id.ibApartmentsListDeleteButton)
 
+        // Set up click listener for entire apartment item
         itemView.setOnClickListener {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
@@ -48,6 +63,7 @@ class ApartmentsViewHolder(itemView: View, adapter: ApartmentsRecyclerAdapter): 
             }
         }
 
+        // Set up like/unlike button click listener
         likeButton.setOnClickListener {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
@@ -60,6 +76,7 @@ class ApartmentsViewHolder(itemView: View, adapter: ApartmentsRecyclerAdapter): 
             }
         }
 
+        // Set up edit button click listener
         editButton.setOnClickListener {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
@@ -68,6 +85,7 @@ class ApartmentsViewHolder(itemView: View, adapter: ApartmentsRecyclerAdapter): 
             }
         }
 
+        // Set up delete button click listener
         deleteButton.setOnClickListener {
             val position = adapterPosition
             if (position != RecyclerView.NO_POSITION) {
@@ -77,6 +95,12 @@ class ApartmentsViewHolder(itemView: View, adapter: ApartmentsRecyclerAdapter): 
         }
     }
 
+    /**
+     * Binds apartment data to the view components.
+     * Updates all text fields, loads image, and configures action buttons based on ownership.
+     * 
+     * @param apartment The apartment object to display
+     */
     @SuppressLint("SetTextI18n")
     fun bind(apartment: Apartment?) {
         titleTextView.text = apartment?.title

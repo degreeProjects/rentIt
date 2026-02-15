@@ -9,9 +9,22 @@ import com.rentit.app.models.apartment.ApartmentModel
 import com.rentit.app.models.user.UserModel
 import kotlinx.coroutines.launch
 
+/**
+ * ApartmentsViewModel
+ * 
+ * ViewModel that manages apartment data and business logic for apartment-related fragments.
+ * 
+ * This ViewModel is shared across all apartment fragments (ApartmentsFragment,
+ * LikedApartmentsFragment, MyApartmentsFragment) to maintain consistent state.
+ */
 class ApartmentsViewModel: ViewModel() {
+    // LiveData containing all apartments, observed by fragments for real-time updates
     var apartments: LiveData<MutableList<Apartment>>? = null
 
+    /**
+     * Handles like/unlike action on an apartment.
+     * Updates both user's liked apartments list and apartment's liked status.
+     */
     fun onLikeClick(apartmentId: String, liked: Boolean) {
         viewModelScope.launch {
             if (liked) {
@@ -24,6 +37,7 @@ class ApartmentsViewModel: ViewModel() {
         }
     }
 
+    // handles deletion of an apartment
     fun onDeleteClick(apartmentId: String) {
         viewModelScope.launch {
             // First remove the apartment from all users who have liked it
@@ -33,10 +47,15 @@ class ApartmentsViewModel: ViewModel() {
         }
     }
 
+    //Initializes the apartments LiveData by fetching all apartments from the model.
     suspend fun setAllApartments() {
         apartments = ApartmentModel.instance.getAllApartments()
     }
 
+    /**
+     * Returns all apartments with user-specific flags (liked, isMine) set.
+     * Iterates through all apartments and marks them based on current user's data.
+     */
     fun getAllApartments(): MutableList<Apartment> {
         val allApartments = mutableListOf<Apartment>()
         val currentUser = UserModel.instance.currentUser
@@ -63,6 +82,7 @@ class ApartmentsViewModel: ViewModel() {
         return allApartments
     }
 
+    // Filters and returns only apartments that the current user has liked
     fun getLikedApartments(): MutableList<Apartment> {
         val likedApartmentsList = mutableListOf<Apartment>()
         val currentUser = UserModel.instance.currentUser ?: return likedApartmentsList
@@ -78,6 +98,7 @@ class ApartmentsViewModel: ViewModel() {
         return likedApartmentsList
     }
 
+    // Filters and returns only apartments owned by the current user.
     fun getMyApartments(): MutableList<Apartment> {
         val myApartmentsList = mutableListOf<Apartment>()
         val currentUser = UserModel.instance.currentUser ?: return myApartmentsList
@@ -92,6 +113,7 @@ class ApartmentsViewModel: ViewModel() {
         return myApartmentsList
     }
 
+    // Refreshes the apartments list by fetching latest data from firebase
     suspend fun refreshAllApartments() {
         ApartmentModel.instance.refreshAllApartments()
     }

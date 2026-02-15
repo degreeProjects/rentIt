@@ -1,7 +1,6 @@
 package com.rentit.app.modules.apartments.myApartments
 
 import android.util.Log
-import android.view.View
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import com.rentit.app.R
@@ -10,16 +9,15 @@ import com.rentit.app.modules.apartments.adapter.OnItemClickListener
 import com.rentit.app.modules.apartments.base.BaseApartmentsFragment
 
 /**
- * Fragment responsible for displaying a list of apartments owned or managed by the current user.
- * Inherits common logic from [BaseApartmentsFragment].
+ * MyApartmentsFragment
+ * 
+ * Displays apartments that belong to the current user.
+ * Extends BaseApartmentsFragment to inherit common apartment list functionality.
  */
 class MyApartmentsFragment : BaseApartmentsFragment() {
     private var TAG = "MyApartmentsFragment"
 
-    /**
-     * Callback function triggered when the "Edit" action is performed on an apartment item.
-     * Navigates to the EditApartmentFragment and passes the specific apartmentId via a Bundle.
-     */
+     // navigates to the edit apartment fragment
     private val onEditClick: (apartmentId: String) -> Unit = {
         findNavController().navigate(
             R.id.action_myApartmentsFragment_to_editApartmentFragment,
@@ -27,20 +25,12 @@ class MyApartmentsFragment : BaseApartmentsFragment() {
         )
     }
 
-    /**
-     * Initializes the [ApartmentsRecyclerAdapter] specific to this fragment.
-     * Uses the user's specific apartments from the ViewModel and attaches the [onEditClick] listener.
-     */
+    // Sets up the RecyclerView adapter with only apartments owned by the current user
     override fun setupApartmentsAdapter(): ApartmentsRecyclerAdapter {
         return ApartmentsRecyclerAdapter(viewModel.getMyApartments(), viewModel, onEditClick)
     }
 
-    /**
-     * Sets up the LiveData observer for the apartments list.
-     * When data changes:
-     * 1. Refreshes the adapter's data set.
-     * 2. Notifies the UI of the change.
-     */
+    // observes changes to apartments and updates the list to show only user's apartments
     override fun observeApartments() {
         viewModel.apartments?.observe(viewLifecycleOwner) {
             adapter.apartments = viewModel.getMyApartments()
@@ -49,9 +39,8 @@ class MyApartmentsFragment : BaseApartmentsFragment() {
     }
 
     /**
-     * Defines the behavior for clicking on an entire apartment item in the list.
-     * Maps the clicked position to an apartment object and navigates to the detailed view
-     * (ExpandedApartmentFragment) using the apartment's unique ID.
+     * Sets up click listener for user's apartment items.
+     * Navigates to expanded apartment view when clicked.
      */
     override fun setupApartmentsAdapterListener(): OnItemClickListener {
         return object: OnItemClickListener {
