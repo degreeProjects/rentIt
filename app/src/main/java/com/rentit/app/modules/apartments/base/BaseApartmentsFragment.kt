@@ -17,24 +17,47 @@ import com.rentit.app.modules.apartments.adapter.ApartmentsRecyclerAdapter
 import com.rentit.app.modules.apartments.adapter.OnItemClickListener
 import kotlinx.coroutines.launch
 
+/**
+ * BaseApartmentsFragment
+ * 
+ * Abstract base class that provides common functionality for all apartment list fragments.
+ * Implements Template Method pattern to allow subclasses to customize specific behaviors
+ * while maintaining consistent overall structure.
+ * 
+ * Subclasses must implement:
+ * - setupApartmentsAdapter(): Define which apartments to display
+ * - observeApartments(): Define how to respond to data changes
+ * - setupApartmentsAdapterListener(): Define click behavior
+ */
 abstract class BaseApartmentsFragment : Fragment() {
     private lateinit var binding: FragmentApartmentsBinding
     private lateinit var recyclerView: RecyclerView
     protected lateinit var viewModel: ApartmentsViewModel
     protected lateinit var adapter: ApartmentsRecyclerAdapter
     protected lateinit var progressBar: ProgressBar
-
+    
+    // Optional hook for pre-loading preparations (fetch user data)
     protected open suspend fun preparations() = Unit
+    
+    // Must return configured adapter with appropriate apartment list
     protected abstract fun setupApartmentsAdapter(): ApartmentsRecyclerAdapter
+    
+    // Must setup LiveData observation and adapter updates
     protected abstract fun observeApartments()
+    
+    // Must return click listener for apartment items
     protected abstract fun setupApartmentsAdapterListener(): OnItemClickListener
 
+    /**
+     * Creates and initializes the fragment's view.
+     * Sets up RecyclerView, ViewModel, loading states, and pull-to-refresh.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentApartmentsBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[ApartmentsViewModel::class.java]
+        binding = FragmentApartmentsBinding.inflate(inflater, container, false) //Connects Kotlin code to the XML layout.
+        viewModel = ViewModelProvider(this)[ApartmentsViewModel::class.java] // Connects the Fragment to its data source.
 
         progressBar = binding.progressBar
         
@@ -81,6 +104,7 @@ abstract class BaseApartmentsFragment : Fragment() {
         return binding.root
     }
 
+    // reloads apartment data from remote source.
     private fun reloadData() {
         lifecycleScope.launch {
             viewModel.refreshAllApartments()

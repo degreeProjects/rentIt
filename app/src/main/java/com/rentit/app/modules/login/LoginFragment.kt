@@ -13,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.rentit.app.R
-import com.rentit.app.base.MyApplication
 import com.rentit.app.utils.RequiredValidation
 import com.rentit.app.databinding.FragmentLoginBinding
 import com.rentit.app.models.auth.AuthModel
@@ -22,6 +21,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+/**
+ * LoginFragment
+ *
+ * Handles user authentication and login functionality.
+ * Validates credentials and navigates to main app on successful login.
+ */
 class LoginFragment : Fragment() {
     companion object {
         const val TAG = "LoginFragment"
@@ -38,21 +43,23 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = FragmentLoginBinding.inflate(inflater, container, false)
+        val binding = FragmentLoginBinding.inflate(inflater, container, false) // connects Kotlin code to the XML layout
         _binding = binding
-        checkIfUserAuthenticated()
+        checkIfUserAuthenticated() // skip login if user already authenticated
 
         setupUi()
 
         return binding.root
     }
 
+    // checks if user is already logged in and redirects to main app if authenticated
     private fun checkIfUserAuthenticated() {
         if (AuthModel.instance.getUser() != null) {
             findNavController().navigate(R.id.action_loginFragment_to_appActivity)
         }
     }
 
+    // initializes UI components and sets up event listeners
     private fun setupUi() {
         val binding = _binding ?: return
         emailTextField = binding.etLoginFragmentEmail
@@ -64,14 +71,17 @@ class LoginFragment : Fragment() {
         signUpButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_loginFragment_to_registerFragment))
     }
 
+    // validates input fields and attempts to sign in user with firebase authentication
     private fun onLoginButtonClicked(view: View) {
         val isValidEmail = RequiredValidation.validateRequiredTextField(emailTextField, "email")
         val isValidPassword = RequiredValidation.validateRequiredTextField(passwordTextField, "password")
         if (isValidEmail && isValidPassword) {
             lifecycleScope.launch(Dispatchers.IO) {
                 try {
+                    // attempt authentication with firebase
                     AuthModel.instance.signIn(emailTextField.text.toString(), passwordTextField.text.toString())
 
+                    // navigate to main app on successful login
                     withContext(Dispatchers.Main) {
                         Navigation.findNavController(view).navigate(R.id.action_loginFragment_to_appActivity)
                     }

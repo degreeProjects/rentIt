@@ -9,7 +9,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
+// Singleton model class managing apartment data from Firestore and local Room database.
 class ApartmentModel private constructor() {
+    // Loading states for tracking data fetch operations
     enum class LoadingState {
         LOADING,
         LOADED,
@@ -25,21 +27,28 @@ class ApartmentModel private constructor() {
         val instance: ApartmentModel = ApartmentModel()
     }
 
+    // Retrieves all apartments from local database and refreshes from Firestore.
+    // Returns LiveData for reactive UI updates.
     suspend fun getAllApartments(): LiveData<MutableList<Apartment>> {
         refreshAllApartments()
         return roomDB.apartmentDao().getAll()
     }
 
+    // Gets a single apartment by ID from local database.
     fun getApartment(id: String): LiveData<Apartment> {
         return roomDB.apartmentDao().getApartment(id)
     }
 
+    // Updates the liked status of an apartment in local database.
+    // withContext shifting that specific work to a background thread for quick UI updates
     suspend fun setApartmentLiked(id: String, liked: Boolean) {
         withContext(Dispatchers.IO) {
             roomDB.apartmentDao().setApartmentLiked(id, liked)
         }
     }
 
+    // Deletes an apartment from both Firestore and local database.
+    // withContext shifting that specific work to a background thread for quick UI updates
     suspend fun deleteApartment(id: String) {
         try {
             firebaseDB.collection(APARTMENTS_COLLECTION_PATH).document(id).delete().await()
@@ -51,13 +60,15 @@ class ApartmentModel private constructor() {
         }
     }
 
+    // Fetches all apartments from Firestore and updates local database.
+    // Updates loading state throughout the process for UI feedback.
     suspend fun refreshAllApartments() {
         try {
             //Update state to loading
             apartmentsListLoadingState.postValue(LoadingState.LOADING)
             Log.d("ApartmentRepo", "Starting to fetch apartments from Firebase...")
 
-            //Fetch data from Firestore using
+            //Fetch data from Firestore
             val snapshot = firebaseDB.collection(APARTMENTS_COLLECTION_PATH).get().await()
             Log.d("ApartmentRepo", "Firebase returned ${snapshot.documents.size} documents")
 
@@ -66,7 +77,7 @@ class ApartmentModel private constructor() {
                 try {
                     doc.data?.let { data ->
                         Log.d("ApartmentRepo", "Processing document: ${doc.id}")
-                        val jsonMap = data.toMutableMap()
+                        val jsonMap = data.toMutableMap() // clone the data to add id field
                         jsonMap["id"] = doc.id // Add document ID from Firestore
                         Apartment.fromJson(jsonMap)
                     }
@@ -93,6 +104,7 @@ class ApartmentModel private constructor() {
         }
     }
 
+    // Adds a new apartment to Firestore and refreshes local data.
     suspend fun addApartment(apartment: Apartment) {
         try {
             firebaseDB.collection(APARTMENTS_COLLECTION_PATH)
@@ -103,6 +115,7 @@ class ApartmentModel private constructor() {
         }
     }
 
+    // Updates an existing apartment in Firestore and refreshes local data.
     suspend fun updateApartment(apartment: Apartment) {
         try {
             firebaseDB.collection(APARTMENTS_COLLECTION_PATH)

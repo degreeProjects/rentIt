@@ -13,6 +13,7 @@ interface ApartmentDao {
     @Query("SELECT * FROM Apartment")
     fun getAll(): LiveData<MutableList<Apartment>>
 
+    //If row with the same ID exists, delete it and replace it with this new one
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(vararg apartment: Apartment)
 
@@ -31,6 +32,8 @@ interface ApartmentDao {
     @Query("DELETE FROM Apartment")
     suspend fun deleteAll()
 
+    //ensures local database perfectly matches the new list of apartments.
+    // with Transaction every change is temporary until the function successfully finishes
     @Transaction
     suspend fun updateAllApartments(apartments: List<Apartment>) {
         deleteAll()

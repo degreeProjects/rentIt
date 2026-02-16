@@ -22,6 +22,11 @@ import com.rentit.app.utils.DateUtils
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.launch
 
+/**
+ * ExpandedApartmentFragment
+ *
+ * Displays detailed view of a single apartment with full information.
+ */
 class ExpandedApartmentFragment : Fragment() {
     private lateinit var binding: FragmentExpandedApartmentBinding
     private lateinit var viewModel: ExpandedApartmentViewModel
@@ -40,14 +45,15 @@ class ExpandedApartmentFragment : Fragment() {
     private lateinit var phoneTextView: TextView
     private lateinit var backButton: ImageButton
 
+    // receives apartment ID from navigation arguments
     private val args: ExpandedApartmentFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentExpandedApartmentBinding.inflate(inflater, container, false)
-        viewModel = ViewModelProvider(this)[ExpandedApartmentViewModel::class.java]
+        binding = FragmentExpandedApartmentBinding.inflate(inflater, container, false) // connects Kotlin code to the XML layout
+        viewModel = ViewModelProvider(this)[ExpandedApartmentViewModel::class.java] // connects the Fragment to its data source
 
         progressBar = binding.pbExpandedApartment
         layout = binding.clExpandedApartmentLayout
@@ -66,9 +72,11 @@ class ExpandedApartmentFragment : Fragment() {
 
         backButton.setOnClickListener(::onBackButtonClicked)
 
+        // get apartment ID from navigation arguments and load apartment data
         val apartmentId: String = args.apartmentId
         viewModel.setApartment(apartmentId)
 
+        // observes apartment data changes and updates UI
         viewModel.apartment?.observe(viewLifecycleOwner) {
             progressBar.visibility = View.VISIBLE
             layout.visibility = View.GONE
@@ -82,6 +90,7 @@ class ExpandedApartmentFragment : Fragment() {
         return binding.root
     }
 
+    // binds apartment data and owner information to UI components
     @SuppressLint("SetTextI18n")
     private suspend fun bind(apartment: Apartment) {
         titleTextView.text = apartment.title
@@ -92,6 +101,7 @@ class ExpandedApartmentFragment : Fragment() {
         propertyTypeTextView.text = apartment.type.toString()
         datesTextView.text = "${DateUtils.formatDate(apartment.startDate)} - ${DateUtils.formatDate(apartment.endDate)}"
 
+        // fetch and display apartment owner's contact information
         val user = UserModel.instance.getUserById(apartment.userId)
 
         user?.let { u ->
@@ -114,6 +124,7 @@ class ExpandedApartmentFragment : Fragment() {
         layout.visibility = View.VISIBLE
     }
 
+    // navigates back to the apartments list
     private fun onBackButtonClicked(view: View) {
         Navigation.findNavController(view).navigate(R.id.apartmentsFragment)
     }

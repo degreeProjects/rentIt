@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout for ProfileFragment.
+    User profile editor with avatar, name, phone number, and logout button.
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,6 +12,7 @@
     android:fitsSystemWindows="false"
     tools:context=".modules.profile.ProfileFragment">
 
+    <!-- Main profile content -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clProfileFragment"
         android:layout_width="match_parent"
@@ -17,6 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- Logout floating action button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/fabProfileFragmentLogout"
             android:layout_width="wrap_content"
@@ -30,6 +36,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- User avatar (tap to change) -->
         <ImageButton
             android:id="@+id/ivbProfileFragmentAvatar"
             android:layout_width="300dp"
@@ -43,7 +50,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fabProfileFragmentLogout" />
 
-
+        <!-- Name input field -->
         <EditText
             android:id="@+id/etProfileFragmentName"
             android:layout_width="298dp"
@@ -61,6 +68,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivbProfileFragmentAvatar" />
 
+        <!-- Phone number input field -->
         <EditText
             android:id="@+id/etProfileFragmentPhoneNumber"
             android:layout_width="298dp"
@@ -78,6 +86,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/etProfileFragmentName" />
 
+        <!-- Save changes button -->
         <Button
             android:id="@+id/btnProfileFragmentEdit"
             android:layout_width="129dp"
@@ -97,6 +106,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- Loading spinner while fetching user data -->
     <ProgressBar
         android:id="@+id/progressBarProfileFragment"
         style="?android:attr/progressBarStyle"

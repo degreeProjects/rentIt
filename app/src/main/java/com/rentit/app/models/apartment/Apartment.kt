@@ -11,6 +11,8 @@ enum class Type(type: String) {
     Penthouse("Penthouse"),
 }
 
+// Room entity representing an apartment listing.
+// Stored locally and synced with Firestore.
 @Entity
 data class Apartment(
     @PrimaryKey val id: String,
@@ -41,6 +43,8 @@ data class Apartment(
         private const val END_DATE_KEY = "endDate"
         private const val IMAGE_URL_KEY = "imageUrl"
 
+        // Converts JSON map from Firestore into Apartment object.
+        // Handles missing or invalid values gracefully with defaults.
         fun fromJson(json: Map<String, Any>): Apartment {
             Log.d("Apartment", "Parsing apartment from JSON: $json")
             
@@ -74,6 +78,8 @@ data class Apartment(
             return Apartment(id, userId, title, pricePerNight, description, city, type, numOfRooms, startDate, endDate, imageUrl)
         }
     }
+    
+    // Converts Apartment object to JSON map for Firestore storage.
     val toJson: Map<String, Any>
         get() = hashMapOf(
             ID_KEY to id,

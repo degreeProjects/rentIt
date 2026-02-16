@@ -1,5 +1,7 @@
 package com.rentit.app.models.user
 
+// Data class representing user profile update input.
+// Contains only the fields that can be updated by the user.
 data class UpdateUserInput(
     var name: String,
     val phoneNumber: String,
@@ -11,6 +13,7 @@ data class UpdateUserInput(
         private const val AVATAR_URL_KEY = "avatarUrl"
     }
 
+    // Converts UpdateUserInput to JSON map for Firestore update operations.
     val toJson: HashMap<String, Any>
         get() = hashMapOf(
             NAME_KEY to name,

@@ -1,13 +1,19 @@
-package com.rentit.app.modules.upsertApartment.editApartment // Package for "edit apartment" feature module
+package com.rentit.app.modules.upsertApartment.editApartment
 
-import androidx.navigation.fragment.navArgs // SafeArgs delegate for reading navigation arguments
-import com.rentit.app.modules.upsertApartment.base.BaseUpsertApartmentFragment // Shared upsert fragment base
+import androidx.navigation.fragment.navArgs
+import com.rentit.app.modules.upsertApartment.base.BaseUpsertApartmentFragment
 
-// Fragment for editing an existing apartment
-class EditApartmentFragment : BaseUpsertApartmentFragment("EditApartmentFragment") { // Pass a tag for logging/debugging
-    private val args: EditApartmentFragmentArgs by navArgs() // Read SafeArgs (contains apartmentId)
+/**
+ * EditApartmentFragment
+ *
+ * Fragment for editing an existing apartment.
+ * Receives apartment ID from navigation arguments and loads existing data.
+ */
+class EditApartmentFragment : BaseUpsertApartmentFragment("EditApartmentFragment") {
+    private val args: EditApartmentFragmentArgs by navArgs()
 
-    override fun getApartmentId(): String { // Provide apartment id to base so it loads and edits existing item
-        return args.apartmentId // Return id passed via navigation arguments
+    // provides apartment ID to base fragment for loading existing apartment data
+    override fun getApartmentId(): String {
+        return args.apartmentId
     }
 }

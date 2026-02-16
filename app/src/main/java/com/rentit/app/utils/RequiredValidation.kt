@@ -3,8 +3,15 @@ package com.rentit.app.utils
 import android.text.TextUtils
 import android.widget.EditText
 
+/**
+ * RequiredValidation
+ *
+ * Utility class for validating form input fields.
+ * Provides validation for required fields with specific rules
+ */
 class RequiredValidation {
     companion object {
+        // validates EditText field based on field type (email, phone number, name, etc.)
         fun validateRequiredTextField(et: EditText, fieldName: String): Boolean {
             val value = et.text.toString()
 
@@ -13,7 +20,7 @@ class RequiredValidation {
                 return false
             }
 
-            // 2. Conditional Checks based on fieldName
+            // field-specific validation rules
             when (fieldName.lowercase()) {
                 "phone number" -> {
                     if (value.length != 10 || !value.all { it.isDigit() }) {
@@ -22,7 +29,7 @@ class RequiredValidation {
                     }
                 }
                 "email" -> {
-                    // Android's built-in email pattern matcher
+                    // simple email validation
                     if (!android.util.Patterns.EMAIL_ADDRESS.matcher(value).matches()) {
                         et.error = "Enter a valid email address"
                         return false
