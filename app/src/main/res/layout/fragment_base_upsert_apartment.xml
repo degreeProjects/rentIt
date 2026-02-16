@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout for add/edit apartment form.
+    Used by both AddApartmentFragment and EditApartmentFragment.
+    Contains form inputs for all apartment details and image selection.
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,6 +12,7 @@
     android:layout_height="match_parent"
     tools:context=".modules.upsertApartment.addApartment.AddApartmentFragment">
 
+    <!-- Loading spinner for edit mode -->
     <ProgressBar
         android:id="@+id/pbUpsertApartment"
         style="?android:attr/progressBarStyle"
@@ -18,6 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Main form content -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/clUpsertApartmentLayout"
         android:layout_width="match_parent"
@@ -27,6 +34,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="8dp">
 
+        <!-- Back button (visible in edit mode only) -->
         <ImageButton
             android:id="@+id/ibUpsertFragmentBack"
             android:layout_width="wrap_content"
@@ -38,6 +46,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Page title (Upload/Edit Your Apartment) -->
         <TextView
             android:id="@+id/tvUpsertApartmentText"
             android:layout_width="wrap_content"
@@ -51,6 +60,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <!-- Apartment image button (tap to select from gallery) -->
         <ImageButton
             android:id="@+id/ibUpsertApartmentAddPhotoButton"
             android:layout_width="wrap_content"
@@ -63,6 +73,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvUpsertApartmentText" />
 
+        <!-- Apartment title input -->
         <EditText
             android:id="@+id/etUpsertApartmentTitle"
             android:layout_width="200dp"
@@ -77,6 +88,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/ibUpsertApartmentAddPhotoButton" />
 
+        <!-- Location spinner -->
         <Spinner
             android:id="@+id/spUpsertApartmentLocation"
             android:layout_width="0dp"
@@ -91,6 +103,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/etUpsertApartmentTitle" />
 
+        <!-- Description input -->
         <EditText
             android:id="@+id/etUpsertApartmentDescription"
             android:layout_width="0dp"
@@ -112,6 +125,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etUpsertApartmentTitle" />
 
+        <!-- Date picker button (opens date range selector) -->
         <ImageButton
             android:id="@+id/ibUpsertApartmentDates"
             android:layout_width="48dp"
@@ -124,6 +138,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etUpsertApartmentDescription" />
 
+        <!-- Selected date range display -->
         <TextView
             android:id="@+id/tvUpsertApartmentDates"
             android:layout_width="0dp"
@@ -154,6 +169,7 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.66" />
 
+        <!-- Number of rooms input -->
         <EditText
             android:id="@+id/etUpsertApartmentRooms"
             android:layout_width="0dp"
@@ -173,6 +189,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvUpsertApartmentDates" />
 
+        <!-- Price per night input -->
         <EditText
             android:id="@+id/etUpsertApartmentPrice"
             android:layout_width="0dp"
@@ -189,6 +206,7 @@
             app:layout_constraintEnd_toStartOf="@+id/guideline7"
             app:layout_constraintStart_toStartOf="@+id/guideline5" />
 
+        <!-- Property type (Apartment, House, Villa, Penthouse) -->
         <Spinner
             android:id="@+id/spUpsertApartmentType"
             android:layout_width="0dp"
@@ -202,6 +220,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline7" />
 
+        <!-- Submit button (Upload/Edit) -->
         <Button
             android:id="@+id/btnUpsertApartmentUpload"
             android:layout_width="120dp"

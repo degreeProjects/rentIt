@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout for AppActivity - main authenticated app.
+    Contains navigation host and bottom navigation bar.
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,6 +14,7 @@
     tools:layout_editor_absoluteX="-30dp"
     tools:layout_editor_absoluteY="6dp">
 
+    <!-- Navigation host for main app content -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/navHostAppFragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
@@ -23,6 +28,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/main_content_nav_graph" />
 
+    <!-- Bottom navigation bar with 5 tabs -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/mainActivityBottomNavigationView"
         android:layout_width="0dp"

@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout for individual apartment list item.
+    Displays apartment image, details, and action buttons (like/edit/delete).
+    Used in RecyclerView for apartments, liked apartments, and my apartments lists.
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,6 +13,7 @@
     android:clipToPadding="false"
     android:padding="16dp">
 
+    <!-- Card container for apartment item -->
     <androidx.cardview.widget.CardView
         android:layout_width="360dp"
         android:layout_height="wrap_content"
@@ -22,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <!-- Apartment main image -->
             <ImageView
                 android:id="@+id/ivApartmentsListImage"
                 android:layout_width="wrap_content"
@@ -33,6 +40,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <!-- Apartment title -->
             <TextView
                 android:id="@+id/tvApartmentsListTitle"
                 android:layout_width="wrap_content"
@@ -46,6 +54,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ivApartmentsListImage" />
 
+            <!-- Price per night -->
             <TextView
                 android:id="@+id/tvApartmentsListPrice"
                 android:layout_width="wrap_content"
@@ -57,6 +66,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvApartmentsListTitle"
                 app:layout_constraintEnd_toEndOf="parent" />
 
+            <!-- Apartment location -->
             <TextView
                 android:id="@+id/tvApartmentsListLocation"
                 android:layout_width="wrap_content"
@@ -69,6 +79,7 @@
                 app:layout_constraintStart_toEndOf="@+id/ivApartmentsListLocationButton"
                 app:layout_constraintTop_toBottomOf="@+id/tvApartmentsListTitle" />
 
+            <!-- Number of rooms -->
             <TextView
                 android:id="@+id/tvApartmentsListRooms"
                 android:layout_width="wrap_content"
@@ -80,6 +91,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvApartmentsListLocation"
                 app:layout_constraintStart_toEndOf="@+id/ivApartmentsListRoomsButton" />
 
+            <!-- Property type -->
             <TextView
                 android:id="@+id/tvApartmentsListPropertyType"
                 android:layout_width="wrap_content"
@@ -91,6 +103,7 @@
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvApartmentsListRooms"
                 app:layout_constraintEnd_toEndOf="parent" />
 
+            <!-- Like button icon -->
             <ImageButton
                 android:id="@+id/ibApartmentsListLikeButton"
                 android:layout_width="32dp"
@@ -106,6 +119,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/ivApartmentsListLocationButton"
                 app:srcCompat="@drawable/like_button" />
 
+            <!-- calender icon -->
             <ImageView
                 android:id="@+id/ivApartmentsListCalendarButton"
                 android:layout_width="24dp"
@@ -117,6 +131,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/ivApartmentsListLocationButton"
                 app:srcCompat="@drawable/calendar_icon" />
 
+            <!-- Available date range -->
             <TextView
                 android:id="@+id/tvApartmentsListDates"
                 android:layout_width="wrap_content"
@@ -129,6 +144,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/ivApartmentsListCalendarButton" />
 
+            <!-- Location icon -->
             <ImageView
                 android:id="@+id/ivApartmentsListLocationButton"
                 android:layout_width="24dp"
@@ -141,6 +157,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvApartmentsListTitle"
                 app:srcCompat="@drawable/location_icon" />
 
+            <!-- Rooms icon -->
             <ImageView
                 android:id="@+id/ivApartmentsListRoomsButton"
                 android:layout_width="24dp"
@@ -151,6 +168,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvApartmentsListTitle"
                 app:srcCompat="@drawable/rooms_icon" />
 
+            <!-- Property type icon -->
             <ImageView
                 android:id="@+id/ivApartmentsListPropertyButton"
                 android:layout_width="24dp"
@@ -161,6 +179,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvApartmentsListTitle"
                 app:srcCompat="@drawable/house_icon" />
 
+            <!-- Actions container for owned apartments (edit/delete buttons) -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/clApartmentsListActions"
                 android:layout_width="0dp"
@@ -173,6 +192,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvApartmentsListPropertyType">
 
+                <!-- Edit button for owned apartments -->
                 <ImageButton
                     android:id="@+id/ibApartmentsListEditButton"
                     android:layout_width="32dp"
@@ -183,6 +203,7 @@
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/edit_button" />
 
+                <!-- Delete button for owned apartments -->
                 <ImageButton
                     android:id="@+id/ibApartmentsListDeleteButton"
                     android:layout_width="32dp"

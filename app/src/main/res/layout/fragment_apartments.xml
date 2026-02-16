@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Layout for apartments list fragments.
+    Used by ApartmentsFragment, LikedApartmentsFragment, and MyApartmentsFragment.
+    Features pull-to-refresh and loading indicator.
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,6 +12,7 @@
     android:layout_height="match_parent"
     tools:context=".modules.apartments.ApartmentsFragment">
 
+    <!-- Pull-to-refresh wrapper for apartments list -->
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/pullToRefresh"
         android:layout_width="wrap_content"
@@ -17,6 +23,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <!-- RecyclerView displaying apartment cards -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvApartmentsFragmentList"
             android:layout_width="409dp"
@@ -27,6 +34,7 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
+    <!-- Loading spinner for initial data fetch -->
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
