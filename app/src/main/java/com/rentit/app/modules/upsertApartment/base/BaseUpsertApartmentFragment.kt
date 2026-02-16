@@ -267,6 +267,8 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() {
                         val uploadUri = imageUri ?: Uri.parse(
                             "android.resource://${requireContext().packageName}/${R.drawable.default_apartment}"
                         )
+
+                        // add the image to Firebase Storage and get the download URL
                         val imageUrl = FirebaseStorageModel.instance.addImageToFirebaseStorage(uploadUri, FirebaseStorageModel.APARTMENTS_PATH)
                         Log.d(TAG, "Image uploaded, URL: $imageUrl")
                         
@@ -275,31 +277,33 @@ abstract class BaseUpsertApartmentFragment(val TAG: String) : Fragment() {
                         }
                         
                         try {
-                            Picasso.get().load(imageUrl).get()
+                            Picasso.get().load(imageUrl).get() // pre-load the image into Picasso cache
                             Log.d(TAG, "Image pre-loaded into Picasso cache")
                         } catch (e: Exception) {
                             Log.e(TAG, "Failed to pre-load image into cache: ${e.message}")
                         }
                         
                         val newApartment = Apartment("", userId, title, price, description, location, Type.valueOf(type), numOfRooms, startDate.timeInMillis, endDate.timeInMillis, imageUrl)
-                        ApartmentModel.instance.addApartment(newApartment)
+                        ApartmentModel.instance.addApartment(newApartment) // add the new apartment to the database
                     }
 
                     lifecycleScope.launch(Dispatchers.Main) {
                         if (apartment == null) {
+                            // upload success
                             Toast.makeText(
                                 requireContext(),
                                 "apartment uploaded successfully",
                                 Toast.LENGTH_SHORT,
                             ).show()
-                            Navigation.findNavController(view).popBackStack(R.id.apartmentsFragment, false)
+                            Navigation.findNavController(view).popBackStack(R.id.apartmentsFragment, false) // navigate back to apartments list
                         } else {
+                            // update success
                             Toast.makeText(
                                 requireContext(),
                                 "apartment updated successfully",
                                 Toast.LENGTH_SHORT,
                             ).show()
-                            Navigation.findNavController(view).popBackStack()
+                            Navigation.findNavController(view).popBackStack() // navigate back to apartments list
                         }
                     }
                 } catch (e: Exception) {
