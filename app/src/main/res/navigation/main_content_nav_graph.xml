@@ -1,81 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Navigation graph for main app content (authenticated users).
+    Manages navigation between apartments list, profile, and apartment details.
+    Used within AppActivity's bottom navigation.
+-->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_content_nav_graph"
     app:startDestination="@id/apartmentsFragment">
+    
+    <!-- All Apartments list - default tab -->
     <fragment
         android:id="@+id/apartmentsFragment"
         android:name="com.rentit.app.modules.apartments.ApartmentsFragment"
         android:label="fragment_apartments"
         tools:layout="@layout/fragment_apartments">
+        <!-- View apartment details -->
         <action
             android:id="@+id/action_apartmentsFragment_to_expandedApartmentFragment"
             app:destination="@id/expandedApartmentFragment"
             app:popUpTo="@id/apartmentsFragment"
             app:popUpToInclusive="true" />
+        <!-- Edit apartment -->
         <action
             android:id="@+id/action_apartmentsFragment_to_editApartmentFragment"
             app:destination="@id/editApartmentFragment"
             app:popUpTo="@id/apartmentsFragment"
             app:popUpToInclusive="false" />
     </fragment>
+    
+    <!-- Add new apartment screen -->
     <fragment
         android:id="@+id/addApartmentFragment"
         android:name="com.rentit.app.modules.upsertApartment.addApartment.AddApartmentFragment"
         android:label="fragment_add_apartment"
         tools:layout="@layout/fragment_base_upsert_apartment" />
+    
+    <!-- User profile screen -->
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.rentit.app.modules.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    
+    <!-- Liked apartments list -->
     <fragment
         android:id="@+id/likedApartmentsFragment"
         android:name="com.rentit.app.modules.apartments.likedApartments.LikedApartmentsFragment"
         android:label="fragment_liked_apartments"
         tools:layout="@layout/fragment_apartments">
+        <!-- View liked apartment details -->
         <action
             android:id="@+id/action_likedApartmentsFragment_to_expandedApartmentFragment"
             app:destination="@id/expandedApartmentFragment"
             app:popUpTo="@id/likedApartmentsFragment"
             app:popUpToInclusive="true" />
+        <!-- Edit liked apartment if owned by user -->
         <action
             android:id="@+id/action_likedApartmentsFragment_to_editApartmentFragment"
             app:destination="@id/editApartmentFragment"
             app:popUpTo="@id/likedApartmentsFragment"
             app:popUpToInclusive="false" />
     </fragment>
+    
+    <!-- My apartments list (user's posted apartments) -->
     <fragment
         android:id="@+id/myApartmentsFragment"
         android:name="com.rentit.app.modules.apartments.myApartments.MyApartmentsFragment"
         android:label="fragment_my_apartments"
         tools:layout="@layout/fragment_apartments">
+        <!-- View own apartment details -->
         <action
             android:id="@+id/action_MyApartmentsFragment_to_expandedApartmentFragment"
             app:destination="@id/expandedApartmentFragment"
             app:popUpTo="@id/myApartmentsFragment"
             app:popUpToInclusive="true" />
+        <!-- Edit own apartment -->
         <action
             android:id="@+id/action_myApartmentsFragment_to_editApartmentFragment"
             app:destination="@id/editApartmentFragment"
             app:popUpTo="@id/myApartmentsFragment"
             app:popUpToInclusive="false" />
     </fragment>
+    
+    <!-- Expanded apartment detail view with owner contact info -->
     <fragment
         android:id="@+id/expandedApartmentFragment"
         android:name="com.rentit.app.modules.expandedApartment.ExpandedApartmentFragment"
         android:label="fragment_expanded_apartment"
         tools:layout="@layout/fragment_expanded_apartment">
+        <!-- Apartment ID passed from list -->
         <argument
             android:name="apartmentId"
             app:argType="string" />
     </fragment>
+    
+    <!-- Edit apartment screen -->
     <fragment
         android:id="@+id/editApartmentFragment"
         android:name="com.rentit.app.modules.upsertApartment.editApartment.EditApartmentFragment"
         android:label="fragment_edit_apartment"
         tools:layout="@layout/fragment_base_upsert_apartment">
+        <!-- Apartment ID of apartment to edit -->
         <argument
             android:name="apartmentId"
             app:argType="string" />

@@ -1,26 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Bottom navigation menu for main app.
+    Provides navigation between main screens: liked, add, home, my apartments, profile.
+-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     
+    <!-- Liked apartments tab -->
     <item
         android:id="@+id/likedApartmentsFragment"
         android:icon="@drawable/like_button_nav"
         android:title="Liked apartments" />
     
+    <!-- Add apartment tab -->
     <item
         android:id="@+id/addApartmentFragment"
         android:icon="@drawable/plus_button_nav"
         android:title="Add Apartment" />
     
+    <!-- All apartments (home) tab -->
     <item
         android:id="@+id/apartmentsFragment"
         android:icon="@drawable/home_button_nav"
         android:title="Home" />
     
+    <!-- My apartments tab -->
     <item
         android:id="@+id/myApartmentsFragment"
         android:icon="@drawable/listings_button_nav"
         android:title="My Apartments" />
     
+    <!-- Profile tab -->
     <item
         android:id="@+id/profileFragment"
         android:icon="@drawable/profile_button_nav"

@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Top app bar menu for main app.
+    Contains quick actions (liked, add) and overflow menu items.
+-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     
+    <!-- Quick action: View liked apartments -->
     <item
         android:id="@+id/likedApartmentsFragment"
         android:icon="@drawable/like_button_nav"
@@ -9,6 +14,7 @@
         app:showAsAction="always"
         app:iconTint="@android:color/white" />
     
+    <!-- Quick action: Add new apartment -->
     <item
         android:id="@+id/addApartmentFragment"
         android:icon="@drawable/plus_button_nav"
@@ -16,6 +22,7 @@
         app:showAsAction="always"
         app:iconTint="@android:color/white" />
     
+    <!-- Overflow menu items -->
     <item
         android:id="@+id/apartmentsFragment"
         android:icon="@drawable/ic_home_top_nav"
