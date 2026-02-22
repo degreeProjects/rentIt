@@ -3,184 +3,188 @@
     Layout for RegisterFragment.
     New user registration form with avatar, name, email, password, and phone number.
 -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
     android:background="#FFFFFF">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clRegisterFragment"
+    <ScrollView
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clRegisterFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="24dp">
+
+            <!-- User avatar preview -->
+            <ImageView
+                android:id="@+id/ivRegisterFragmentUserAvatar"
+                android:layout_width="334dp"
+                android:layout_height="139dp"
+                android:layout_marginTop="80dp"
+                android:scaleType="centerInside"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.482"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/user_circle" />
+
+            <!-- Button to select avatar image -->
+            <Button
+                android:id="@+id/btnRegisterFragmentAddImage"
+                android:layout_width="112dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="4dp"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:text="Add Image"
+                android:textSize="14sp"
+                app:cornerRadius="22dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/ivRegisterFragmentUserAvatar" />
+
+            <!-- Name input field -->
+            <EditText
+                android:id="@+id/etRegisterFragmentName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:background="@android:drawable/editbox_background"
+                android:drawableLeft="@drawable/ic_identity"
+                android:drawablePadding="10dp"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:padding="12dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnRegisterFragmentAddImage" />
+
+            <!-- Email input field -->
+            <EditText
+                android:id="@+id/etRegisterFragmentEmail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@android:drawable/editbox_background"
+                android:drawableLeft="@drawable/ic_email"
+                android:drawablePadding="10dp"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="12dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etRegisterFragmentName" />
+
+            <!-- Password input field -->
+            <EditText
+                android:id="@+id/etRegisterFragmentPassword"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@android:drawable/editbox_background"
+                android:drawableLeft="@drawable/ic_password"
+                android:drawablePadding="10dp"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="12dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etRegisterFragmentEmail" />
+
+            <!-- Phone number input field -->
+            <EditText
+                android:id="@+id/etRegisterFragmentPhoneNumber"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@android:drawable/editbox_background"
+                android:drawableLeft="@drawable/ic_phone"
+                android:drawablePadding="10dp"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:padding="12dp"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etRegisterFragmentPassword" />
+
+            <!-- Registration submit button -->
+            <Button
+                android:id="@+id/btnRegisterFragment"
+                android:layout_width="129dp"
+                android:layout_height="49dp"
+                android:layout_marginTop="32dp"
+                android:layout_marginBottom="24dp"
+                android:text="Register"
+                android:textColor="#FFFFFF"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="22dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/etRegisterFragmentPhoneNumber"
+                app:layout_constraintVertical_bias="0.301" />
+
+            <!-- "Already have an account?" text -->
+            <TextView
+                android:id="@+id/tvRegisterFragmentAlreadyHaveAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                android:text="Already have an account?"
+                android:textColor="#666666"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/btnRegisterFragmentSignIn"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/btnRegisterFragment"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <!-- "Sign In" navigation link -->
+            <Button
+                android:id="@+id/btnRegisterFragmentSignIn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:background="@android:color/transparent"
+                android:minWidth="0dp"
+                android:minHeight="0dp"
+                android:paddingHorizontal="4dp"
+                android:paddingVertical="0dp"
+                android:text="Sign In"
+                android:textColor="#6200EE"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/tvRegisterFragmentAlreadyHaveAccount"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/tvRegisterFragmentAlreadyHaveAccount"
+                app:layout_constraintTop_toTopOf="@id/tvRegisterFragmentAlreadyHaveAccount" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+    <!-- Loading spinner during registration (outside ScrollView so it stays visible) -->
+    <ProgressBar
+        android:id="@+id/progressBarRegisterFragment"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/purple_500"
+        android:visibility="gone" />
 
-        <!-- Loading spinner during registration -->
-        <ProgressBar
-            android:id="@+id/progressBarRegisterFragment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:indeterminateTint="@color/purple_500"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <!-- User avatar preview -->
-        <ImageView
-            android:id="@+id/ivRegisterFragmentUserAvatar"
-            android:layout_width="334dp"
-            android:layout_height="139dp"
-            android:layout_marginTop="80dp"
-            android:scaleType="centerInside"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.482"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/user_circle" />
-
-        <!-- Button to select avatar image -->
-        <Button
-            android:id="@+id/btnRegisterFragmentAddImage"
-            android:layout_width="112dp"
-            android:layout_height="45dp"
-            android:layout_marginTop="4dp"
-            android:paddingHorizontal="24dp"
-            android:paddingVertical="8dp"
-            android:text="Add Image"
-            android:textSize="14sp"
-            app:cornerRadius="22dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/ivRegisterFragmentUserAvatar" />
-
-        <!-- Name input field -->
-        <EditText
-            android:id="@+id/etRegisterFragmentName"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
-            android:background="@android:drawable/editbox_background"
-            android:drawableLeft="@drawable/ic_identity"
-            android:drawablePadding="10dp"
-            android:hint="Name"
-            android:inputType="textPersonName"
-            android:padding="12dp"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnRegisterFragmentAddImage" />
-
-        <!-- Email input field -->
-        <EditText
-            android:id="@+id/etRegisterFragmentEmail"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@android:drawable/editbox_background"
-            android:drawableLeft="@drawable/ic_email"
-            android:drawablePadding="10dp"
-            android:hint="Email"
-            android:inputType="textEmailAddress"
-            android:padding="12dp"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etRegisterFragmentName" />
-
-        <!-- Password input field -->
-        <EditText
-            android:id="@+id/etRegisterFragmentPassword"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@android:drawable/editbox_background"
-            android:drawableLeft="@drawable/ic_password"
-            android:drawablePadding="10dp"
-            android:hint="Password"
-            android:inputType="textPassword"
-            android:padding="12dp"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etRegisterFragmentEmail" />
-
-        <!-- Phone number input field -->
-        <EditText
-            android:id="@+id/etRegisterFragmentPhoneNumber"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:background="@android:drawable/editbox_background"
-            android:drawableLeft="@drawable/ic_phone"
-            android:drawablePadding="10dp"
-            android:hint="Phone Number"
-            android:inputType="phone"
-            android:padding="12dp"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etRegisterFragmentPassword" />
-
-        <!-- Registration submit button -->
-        <Button
-            android:id="@+id/btnRegisterFragment"
-            android:layout_width="129dp"
-            android:layout_height="49dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="24dp"
-            android:text="Register"
-            android:textColor="#FFFFFF"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:cornerRadius="22dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/etRegisterFragmentPhoneNumber"
-            app:layout_constraintVertical_bias="0.301" />
-
-        <!-- "Already have an account?" text -->
-        <TextView
-            android:id="@+id/tvRegisterFragmentAlreadyHaveAccount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="24dp"
-            android:text="Already have an account?"
-            android:textColor="#666666"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnRegisterFragmentSignIn"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btnRegisterFragment"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <!-- "Sign In" navigation link -->
-        <Button
-            android:id="@+id/btnRegisterFragmentSignIn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:background="@android:color/transparent"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:paddingHorizontal="4dp"
-            android:paddingVertical="0dp"
-            android:text="Sign In"
-            android:textColor="#6200EE"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@id/tvRegisterFragmentAlreadyHaveAccount"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/tvRegisterFragmentAlreadyHaveAccount"
-            app:layout_constraintTop_toTopOf="@id/tvRegisterFragmentAlreadyHaveAccount" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</ScrollView>
+</FrameLayout>

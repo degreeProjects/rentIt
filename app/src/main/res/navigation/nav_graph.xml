@@ -31,7 +31,12 @@
         android:id="@+id/registerFragment"
         android:name="com.rentit.app.modules.register.RegisterFragment"
         android:label="fragment_register"
-        tools:layout="@layout/fragment_register" />
+        tools:layout="@layout/fragment_register">
+        <!-- Navigate to main app after successful registration -->
+        <action
+            android:id="@+id/action_registerFragment_to_appActivity"
+            app:destination="@id/appActivity" />
+    </fragment>
     
     <!-- Main app activity with bottom navigation -->
     <activity

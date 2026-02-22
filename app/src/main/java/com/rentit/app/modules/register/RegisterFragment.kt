@@ -26,6 +26,7 @@ import com.rentit.app.models.user.UserModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 
 /**
@@ -127,7 +128,7 @@ class RegisterFragment : Fragment() {
                     withContext(Dispatchers.Main) {
                         progressBar.visibility = View.GONE // Hide loading spinner
                         layout.visibility = View.VISIBLE
-                        view.findNavController().popBackStack(R.id.loginFragment, false)
+                        Navigation.findNavController(view).navigate(R.id.action_registerFragment_to_appActivity)
                     }
                 } catch (e: Exception) {
                     Log.e(TAG, "An unexpected error occurred: ${e.message}")
